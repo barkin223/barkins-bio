@@ -3,118 +3,246 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bio</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <title>hris</title>
+  <link href="https://fonts.googleapis.com/css2?family=gg+sans:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
-    :root {
-      --bg:          #0e0e0e;
-      --card:        #161616;
-      --accent:      #c8f04e;
-      --text:        #f0ede8;
-      --muted:       #6b6b6b;
-      --radius:      18px;
-      --font-head:   'DM Serif Display', serif;
-      --font-body:   'DM Sans', sans-serif;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-body);
-      min-height: 100vh;
+      background: #111;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem 1rem;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
     }
+
     .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      max-width: 480px;
+      background: #111214;
+      border-radius: 16px;
+      width: 300px;
+      overflow: hidden;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.6);
+    }
+
+    /* =============================================
+       CUSTOMIZE: Banner — change background-color
+       or swap to background-image: url('YOUR_IMG')
+       ============================================= */
+    .banner {
+      height: 100px;
+      background: #1a1a2e;
+      background-image: linear-gradient(to bottom right, #0d0d1a, #1a1a2e);
+      /* To use a photo: background: url('YOUR_BANNER_URL') center/cover; */
+    }
+
+    .profile-section {
+      padding: 0 16px 16px;
+      position: relative;
+    }
+
+    /* =============================================
+       CUSTOMIZE: Avatar emoji or swap for <img>
+       ============================================= */
+    .avatar-wrap {
+      position: relative;
+      display: inline-block;
+      margin-top: -36px;
+      margin-bottom: 12px;
+    }
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #5865F2;
+      border: 6px solid #111214;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      overflow: hidden;
+    }
+
+    .avatar img {
       width: 100%;
-      padding: 2.5rem 2rem;
-      border: 1px solid #252525;
-      animation: rise 0.6s cubic-bezier(.22,1,.36,1) both;
+      height: 100%;
+      object-fit: cover;
     }
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
+
+    .online-dot {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #23a55a;
+      border: 3px solid #111214;
     }
-    .avatar-wrap { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.6rem; }
-    .avatar-placeholder {
-      width: 72px; height: 72px; border-radius: 50%;
-      background: #2a2a2a; border: 3px solid var(--accent);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.8rem; flex-shrink: 0;
+
+    /* =============================================
+       CUSTOMIZE: Name
+       ============================================= */
+    .username {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
     }
-    .name-block h1 { font-family: var(--font-head); font-size: 1.55rem; line-height: 1.1; letter-spacing: -0.02em; }
-    .name-block .handle { color: var(--accent); font-size: 0.85rem; font-weight: 500; margin-top: 0.25rem; }
-    .status {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      font-size: 0.78rem; color: var(--muted);
-      background: #1e1e1e; border: 1px solid #2a2a2a;
-      border-radius: 999px; padding: 0.3rem 0.75rem; margin-bottom: 1.4rem;
+
+    /* =============================================
+       CUSTOMIZE: Badges — add/remove emoji badges
+       ============================================= */
+    .badges {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 10px;
     }
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 2s ease infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-    .bio { font-size: 0.95rem; line-height: 1.7; color: #b0aca6; margin-bottom: 1.6rem; }
-    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.8rem; }
-    .tag { font-size: 0.78rem; font-weight: 500; padding: 0.3rem 0.75rem; border-radius: 999px; background: #1e1e1e; border: 1px solid #2e2e2e; color: var(--muted); }
-    .links { display: flex; flex-direction: column; gap: 0.6rem; }
-    .link-btn {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.85rem 1rem; border-radius: 12px;
-      background: #1a1a1a; border: 1px solid #272727;
-      color: var(--text); text-decoration: none;
-      font-size: 0.88rem; font-weight: 500;
-      transition: border-color 0.2s, background 0.2s;
+
+    .badge {
+      font-size: 1rem;
+      background: #2b2d31;
+      border-radius: 6px;
+      padding: 3px 5px;
     }
-    .link-btn:hover { border-color: var(--accent); background: #1f1f1f; }
-    .link-btn span { display: flex; align-items: center; gap: 0.6rem; }
-    .link-btn .arrow { color: var(--muted); font-size: 1rem; }
-    .link-btn:hover .arrow { color: var(--accent); }
-    .footer { margin-top: 2rem; text-align: center; font-size: 0.75rem; color: #3a3a3a; }
+
+    /* =============================================
+       CUSTOMIZE: Bio text
+       ============================================= */
+    .bio {
+      font-size: 0.82rem;
+      color: #dbdee1;
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+
+    /* Activity card */
+    .activity {
+      background: #2b2d31;
+      border-radius: 10px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .activity-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background: #1e6fa5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .activity-text { flex: 1; min-width: 0; }
+
+    .activity-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #b5bac1;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 2px;
+    }
+
+    .activity-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .activity-detail {
+      font-size: 0.75rem;
+      color: #b5bac1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* =============================================
+       CUSTOMIZE: Social links — change href values
+       ============================================= */
+    .socials {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .social-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #2b2d31;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.15s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .social-btn:hover {
+      background: #3a3d44;
+      transform: scale(1.1);
+    }
   </style>
 </head>
 <body>
   <div class="card">
-    <div class="avatar-wrap">
-      <div class="avatar-placeholder">🧑</div>
-      <div class="name-block">
-        <h1>Your Name</h1>
-        <div class="handle">@yourhandle</div>
+
+    <!-- CUSTOMIZE: Banner color is set in CSS above -->
+    <div class="banner"></div>
+
+    <div class="profile-section">
+      <div class="avatar-wrap">
+        <!-- CUSTOMIZE: Change emoji or replace with <img src="YOUR_URL"> -->
+        <div class="avatar">🐱</div>
+        <div class="online-dot"></div>
+      </div>
+
+      <!-- CUSTOMIZE: Your name -->
+      <div class="username">hris</div>
+
+      <!-- CUSTOMIZE: Add/remove badges -->
+      <div class="badges">
+        <span class="badge">💎</span>
+        <span class="badge">✖️</span>
+        <span class="badge">✅</span>
+        <span class="badge">🔥</span>
+      </div>
+
+      <!-- CUSTOMIZE: Your bio -->
+      <div class="bio">guns.lol on top</div>
+
+      <!-- CUSTOMIZE: Activity — what you're doing -->
+      <div class="activity">
+        <div class="activity-icon">🎮</div>
+        <div class="activity-text">
+          <div class="activity-title">Playing</div>
+          <div class="activity-name">Visual Studio Code</div>
+          <div class="activity-detail">Editing globals.css</div>
+        </div>
+      </div>
+
+      <!-- CUSTOMIZE: Social links -->
+      <div class="socials">
+        <a class="social-btn" href="https://yoursite.com" target="_blank" title="Website">🌐</a>
+        <a class="social-btn" href="https://github.com" target="_blank" title="GitHub">🐙</a>
+        <a class="social-btn" href="https://discord.com" target="_blank" title="Discord">💬</a>
       </div>
     </div>
-    <div class="status">
-      <span class="status-dot"></span>
-      Available for work
-    </div>
-    <p class="bio">
-      Designer, developer, and creator based somewhere cool.
-      I build things for the web and occasionally make art.
-      Coffee-fueled, deadline-driven.
-    </p>
-    <div class="tags">
-      <span class="tag">Design</span>
-      <span class="tag">React</span>
-      <span class="tag">Photography</span>
-      <span class="tag">Open to collab</span>
-    </div>
-    <div class="links">
-      <a class="link-btn" href="https://twitter.com" target="_blank">
-        <span>Twitter / X</span><span class="arrow">↗</span>
-      </a>
-      <a class="link-btn" href="https://github.com" target="_blank">
-        <span>GitHub</span><span class="arrow">↗</span>
-      </a>
-      <a class="link-btn" href="mailto:you@email.com">
-        <span>Email me</span><span class="arrow">↗</span>
-      </a>
-      <a class="link-btn" href="https://yoursite.com" target="_blank">
-        <span>Portfolio</span><span class="arrow">↗</span>
-      </a>
-    </div>
-    <div class="footer">made with ♥</div>
+
   </div>
 </body>
 </html>
