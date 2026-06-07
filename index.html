@@ -103,7 +103,7 @@
     .music-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .music-sub { font-size: 0.75rem; color: #aaa; margin-top: 2px; }
     .progress-wrap { width: 100%; height: 3px; background: rgba(255,255,255,0.15); border-radius: 99px; margin-top: 8px; overflow: hidden; }
-    .progress-bar { height: 100%; background: #e8a040; border-radius: 99px; width: 0%; transition: width 0.1s linear; }
+    .progress-bar { height: 100%; background: #e8a040; border-radius: 99px; width: 0%; }
     .music-btn {
       background: rgba(255,255,255,0.15); border: none; border-radius: 50%;
       width: 36px; height: 36px; color: #fff; font-size: 1rem; cursor: pointer;
@@ -117,12 +117,13 @@
 <body>
   <div class="bg"></div>
   <div class="snow" id="snow"></div>
-  <audio id="music" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_946f1c9925.mp3" type="audio/mpeg"/>
+  
+  <audio id="music" loop preload="auto">
+    <source src="https://stream.zeno.fm/0r0xa792kwzuv" type="audio/mpeg"/>
   </audio>
 
   <div class="content">
-    <div class="username">Barkin</div>
+    <div class="username">barki</div>
 
     <div class="card">
       <div class="card-row">
@@ -151,18 +152,18 @@
     <div class="music">
       <div class="music-icon" id="disc-icon">💿</div>
       <div class="music-info">
-        <div class="music-title">Lofi Chill</div>
-        <div class="music-sub">calming beats</div>
+        <div class="music-title">Lofi Chill Radio</div>
+        <div class="music-sub">live stream beats</div>
         <div class="progress-wrap"><div class="progress-bar" id="progress"></div></div>
       </div>
-      <button class="music-btn" id="play-btn" onclick="toggleMusic()">▶</button>
+      <button class="music-btn" id="play-btn">▶</button>
     </div>
 
     <div class="views" id="view-counter">👁 0</div>
   </div>
 
   <script>
-    // Snow setup
+    // Snow Effect
     const snow = document.getElementById('snow');
     for (let i = 0; i < 30; i++) {
       const f = document.createElement('div');
@@ -176,52 +177,55 @@
       snow.appendChild(f);
     }
 
-    // Dynamic views helper
     document.getElementById('view-counter').textContent = `👁 ${Math.floor(Math.random() * 500) + 120}`;
 
-    // Music Player logic
+    // Elements
     const audio = document.getElementById('music');
     const btn = document.getElementById('play-btn');
     const bar = document.getElementById('progress');
     const disc = document.getElementById('disc-icon');
-    let playing = false;
 
-    function toggleMusic() {
-      if (playing) {
+    // Centralized Play/Pause logic to prevent getting stuck
+    function handlePlayback() {
+      if (!audio.paused) {
         audio.pause();
         btn.textContent = '▶';
         disc.style.animationPlayState = 'paused';
-        playing = false;
       } else {
-        // Catch browser blocker safety restrictions
-        audio.play().then(() => {
-          btn.textContent = '⏸';
-          disc.style.animationPlayState = 'running';
-          playing = true;
-        }).catch(err => {
-          console.log("Playback blocked until user interacts with the page.", err);
-        });
+        audio.play()
+          .then(() => {
+            btn.textContent = '⏸';
+            disc.style.animationPlayState = 'running';
+          })
+          .catch(err => console.log("Playback engine waiting for interaction...", err));
       }
     }
 
-    // Smooth progress bar update
+    // Explicit button listener
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Stops the document-click below from double-triggering
+      handlePlayback();
+    });
+
+    // Blanket backup: plays when they click anywhere else on the screen the first time
+    document.addEventListener('click', () => {
+      if (audio.paused) {
+        handlePlayback();
+      }
+    }, { once: true });
+
+    // Progress bar update
     audio.addEventListener('timeupdate', () => {
       if (audio.duration) {
         bar.style.width = (audio.currentTime / audio.duration * 100) + '%';
+      } else {
+        // For infinite live streams, simulate progress visually
+        if(!audio.paused) {
+           let currentWidth = parseFloat(bar.style.width) || 0;
+           bar.style.width = (currentWidth >= 100 ? 0 : currentWidth + 0.5) + '%';
+        }
       }
     });
-
-    // Reset bar cleanly when it loops
-    audio.addEventListener('seeked', () => {
-      if(audio.currentTime === 0) bar.style.width = '0%';
-    });
-
-    // Autoplay trigger on first click anywhere on the page
-    document.addEventListener('click', () => {
-      if (!playing) {
-        toggleMusic();
-      }
-    }, { once: true });
   </script>
 </body>
 </html>
