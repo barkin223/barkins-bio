@@ -19,29 +19,41 @@
       justify-content: center;
       position: relative;
     }
+
+    /* Slow dark warm sunset gradient */
     .bg {
       position: fixed;
       inset: 0;
       z-index: 0;
-      background: linear-gradient(270deg, #ff6ec7, #a855f7, #3b82f6, #06b6d4, #10b981, #f59e0b, #ef4444, #ff6ec7);
-      background-size: 400% 400%;
-      animation: gradshift 10s ease infinite;
-      filter: brightness(0.5) saturate(1.4);
+      background: linear-gradient(270deg, #1a0a00, #3b1f00, #5c3200, #2d1a00, #1a0e00, #4a2800, #1a0a00);
+      background-size: 600% 600%;
+      animation: gradshift 30s ease infinite;
     }
     @keyframes gradshift {
       0%   { background-position: 0% 50%; }
       50%  { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+
+    /* Warm glow in center like a sun */
+    .bg::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 50% 60%, rgba(255,160,30,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
     .snow { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
     .flake {
       position: absolute; top: -20px;
-      color: rgba(255,255,255,0.8);
+      color: rgba(255,220,150,0.5);
       font-size: 1rem;
       animation: fall linear infinite;
       user-select: none;
     }
     @keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+
     .content {
       position: relative; z-index: 2;
       display: flex; flex-direction: column;
@@ -54,15 +66,16 @@
       text-shadow: 0 2px 30px rgba(0,0,0,0.9);
     }
     .card {
-      background: rgba(0,0,0,0.45);
+      background: rgba(0,0,0,0.55);
       backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,180,80,0.1);
       border-radius: 16px;
       padding: 14px 18px; width: 100%;
     }
     .card-row { display: flex; align-items: center; gap: 12px; }
     .card-title { font-size: 0.95rem; font-weight: 600; color: #fff; }
     .card-sub { font-size: 0.78rem; color: #ccc; margin-top: 2px; }
+
     .socials { display: flex; gap: 12px; }
     .social-btn {
       width: 64px; height: 64px;
@@ -76,10 +89,11 @@
     .social-btn:active { transform: scale(0.95); }
     .discord-btn { background: #5865F2; }
     .tiktok-btn  { background: #111; border: 1px solid #444; }
+
     .music {
-      background: rgba(0,0,0,0.45);
+      background: rgba(0,0,0,0.55);
       backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,180,80,0.1);
       border-radius: 16px;
       padding: 14px 18px; width: 100%;
       display: flex; align-items: center; gap: 14px;
@@ -90,7 +104,7 @@
     .music-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .music-sub { font-size: 0.75rem; color: #aaa; margin-top: 2px; }
     .progress-wrap { width: 100%; height: 3px; background: rgba(255,255,255,0.15); border-radius: 99px; margin-top: 8px; overflow: hidden; }
-    .progress-bar { height: 100%; background: #fff; border-radius: 99px; width: 0%; transition: width 1s linear; }
+    .progress-bar { height: 100%; background: #e8a040; border-radius: 99px; width: 0%; transition: width 1s linear; }
     .music-btn {
       background: rgba(255,255,255,0.15); border: none; border-radius: 50%;
       width: 36px; height: 36px; color: #fff; font-size: 1rem; cursor: pointer;
@@ -109,7 +123,6 @@
   </audio>
 
   <div class="content">
-
     <div class="username">barki</div>
 
     <div class="card">
@@ -123,21 +136,17 @@
     </div>
 
     <div class="socials">
-
-      <!-- Discord — real Wumpus logo SVG -->
       <a class="social-btn discord-btn" href="https://discord.com/users/YOURID" target="_blank" title="Discord">
         <svg width="40" height="40" viewBox="0 0 127.14 96.36" fill="white" xmlns="http://www.w3.org/2000/svg">
           <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
         </svg>
       </a>
 
-      <!-- TikTok -->
       <a class="social-btn tiktok-btn" href="https://tiktok.com/@yourhandle" target="_blank" title="TikTok">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
           <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.16 8.16 0 0 0 4.77 1.52V6.82a4.85 4.85 0 0 1-1-.13z"/>
         </svg>
       </a>
-
     </div>
 
     <div class="music">
@@ -163,7 +172,7 @@
       f.style.fontSize = (0.6 + Math.random() * 0.8) + 'rem';
       f.style.animationDuration = (6 + Math.random() * 10) + 's';
       f.style.animationDelay = (Math.random() * 10) + 's';
-      f.style.opacity = 0.4 + Math.random() * 0.5;
+      f.style.opacity = 0.3 + Math.random() * 0.4;
       snow.appendChild(f);
     }
     const audio = document.getElementById('music');
