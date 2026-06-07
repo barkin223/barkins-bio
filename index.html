@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Inter', sans-serif;
       background: #000;
@@ -20,182 +19,99 @@
       justify-content: center;
       position: relative;
     }
-
-    /* =============================================
-       CUSTOMIZE: Background — swap url() with your image
-       ============================================= */
     .bg {
       position: fixed;
       inset: 0;
-      background: url('https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=1200&q=80') center/cover no-repeat;
-      filter: brightness(0.35) grayscale(0.6);
       z-index: 0;
+      background: linear-gradient(270deg, #ff6ec7, #a855f7, #3b82f6, #06b6d4, #10b981, #f59e0b, #ef4444, #ff6ec7);
+      background-size: 400% 400%;
+      animation: gradshift 10s ease infinite;
+      filter: brightness(0.5) saturate(1.4);
     }
-
-    /* Snowflakes */
+    @keyframes gradshift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
     .snow { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
     .flake {
-      position: absolute;
-      top: -20px;
-      color: rgba(255,255,255,0.7);
+      position: absolute; top: -20px;
+      color: rgba(255,255,255,0.8);
       font-size: 1rem;
       animation: fall linear infinite;
       user-select: none;
     }
-    @keyframes fall {
-      to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-    }
-
-    /* Main content */
+    @keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
     .content {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      padding: 2rem;
-      width: 100%;
-      max-width: 480px;
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 16px;
+      padding: 2rem; width: 100%; max-width: 420px;
     }
-
-    /* =============================================
-       CUSTOMIZE: Your username
-       ============================================= */
     .username {
-      font-size: 3rem;
-      font-weight: 300;
+      font-size: 3rem; font-weight: 300;
       letter-spacing: 0.05em;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+      text-shadow: 0 2px 30px rgba(0,0,0,0.9);
     }
-
-    /* Info card */
     .card {
-      background: rgba(30,30,30,0.65);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.12);
       border-radius: 16px;
-      padding: 18px 24px;
-      width: 100%;
-      text-align: left;
+      padding: 14px 18px; width: 100%;
     }
-
-    .card-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 6px;
-    }
-
-    .card-title {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #fff;
-    }
-
-    .card-sub {
-      font-size: 0.82rem;
-      color: #aaa;
-      margin-top: 2px;
-    }
-
-    /* Views */
-    .views {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.9rem;
-      color: #ccc;
-      align-self: flex-start;
-    }
-
-    /* Music player */
-    .music {
-      background: rgba(30,30,30,0.65);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.08);
+    .card-row { display: flex; align-items: center; gap: 12px; }
+    .card-title { font-size: 0.95rem; font-weight: 600; color: #fff; }
+    .card-sub { font-size: 0.78rem; color: #ccc; margin-top: 2px; }
+    .socials { display: flex; gap: 12px; }
+    .social-btn {
+      width: 64px; height: 64px;
       border-radius: 16px;
-      padding: 14px 18px;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .music-icon {
-      font-size: 1.6rem;
-      animation: spin 4s linear infinite;
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-
-    .music-info { flex: 1; min-width: 0; }
-
-    .music-title {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #fff;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .music-sub { font-size: 0.75rem; color: #888; margin-top: 2px; }
-
-    .music-btn {
-      background: rgba(255,255,255,0.1);
-      border: none;
-      border-radius: 50%;
-      width: 36px; height: 36px;
-      color: #fff;
-      font-size: 1rem;
-      cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s;
+      text-decoration: none;
+      transition: transform 0.15s, filter 0.15s;
       flex-shrink: 0;
     }
-    .music-btn:hover { background: rgba(255,255,255,0.2); }
-
-    /* Progress bar */
-    .progress-wrap {
-      width: 100%;
-      height: 3px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 99px;
-      margin-top: 10px;
-      overflow: hidden;
+    .social-btn:hover { transform: scale(1.1); filter: brightness(1.15); }
+    .social-btn:active { transform: scale(0.95); }
+    .discord-btn { background: #5865F2; }
+    .tiktok-btn  { background: #111; border: 1px solid #444; }
+    .music {
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 14px 18px; width: 100%;
+      display: flex; align-items: center; gap: 14px;
     }
-    .progress-bar {
-      height: 100%;
-      background: #fff;
-      border-radius: 99px;
-      width: 0%;
-      transition: width 1s linear;
+    .music-icon { font-size: 1.6rem; animation: spin 4s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .music-info { flex: 1; min-width: 0; }
+    .music-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .music-sub { font-size: 0.75rem; color: #aaa; margin-top: 2px; }
+    .progress-wrap { width: 100%; height: 3px; background: rgba(255,255,255,0.15); border-radius: 99px; margin-top: 8px; overflow: hidden; }
+    .progress-bar { height: 100%; background: #fff; border-radius: 99px; width: 0%; transition: width 1s linear; }
+    .music-btn {
+      background: rgba(255,255,255,0.15); border: none; border-radius: 50%;
+      width: 36px; height: 36px; color: #fff; font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; flex-shrink: 0;
     }
+    .music-btn:hover { background: rgba(255,255,255,0.25); }
+    .views { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; color: #ddd; align-self: flex-start; }
   </style>
 </head>
 <body>
-
-  <!-- Background -->
   <div class="bg"></div>
-
-  <!-- Snow -->
   <div class="snow" id="snow"></div>
-
-  <!-- Hidden audio — calming lo-fi music -->
   <audio id="music" loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_946f1c9925.mp3" type="audio/mpeg"/>
   </audio>
 
   <div class="content">
 
-    <!-- CUSTOMIZE: Change "barki" to your name -->
     <div class="username">barki</div>
 
-    <!-- CUSTOMIZE: Your info card -->
     <div class="card">
       <div class="card-row">
         <span style="font-size:1.2rem">🎮</span>
@@ -206,24 +122,38 @@
       </div>
     </div>
 
-    <!-- Music player -->
+    <div class="socials">
+
+      <!-- Discord — real Wumpus logo SVG -->
+      <a class="social-btn discord-btn" href="https://discord.com/users/YOURID" target="_blank" title="Discord">
+        <svg width="40" height="40" viewBox="0 0 127.14 96.36" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
+        </svg>
+      </a>
+
+      <!-- TikTok -->
+      <a class="social-btn tiktok-btn" href="https://tiktok.com/@yourhandle" target="_blank" title="TikTok">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.16 8.16 0 0 0 4.77 1.52V6.82a4.85 4.85 0 0 1-1-.13z"/>
+        </svg>
+      </a>
+
+    </div>
+
     <div class="music">
       <div class="music-icon">💿</div>
       <div class="music-info">
-        <div class="music-title" id="song-title">Lofi Chill</div>
+        <div class="music-title">Lofi Chill</div>
         <div class="music-sub">calming beats</div>
         <div class="progress-wrap"><div class="progress-bar" id="progress"></div></div>
       </div>
       <button class="music-btn" id="play-btn" onclick="toggleMusic()">▶</button>
     </div>
 
-    <!-- Views -->
     <div class="views">👁 0</div>
-
   </div>
 
   <script>
-    // Snow
     const snow = document.getElementById('snow');
     for (let i = 0; i < 30; i++) {
       const f = document.createElement('div');
@@ -236,35 +166,21 @@
       f.style.opacity = 0.4 + Math.random() * 0.5;
       snow.appendChild(f);
     }
-
-    // Music
     const audio = document.getElementById('music');
     const btn = document.getElementById('play-btn');
     const bar = document.getElementById('progress');
     let playing = false;
-
     function toggleMusic() {
-      if (playing) {
-        audio.pause();
-        btn.textContent = '▶';
-      } else {
-        audio.play();
-        btn.textContent = '⏸';
-      }
+      if (playing) { audio.pause(); btn.textContent = '▶'; }
+      else { audio.play(); btn.textContent = '⏸'; }
       playing = !playing;
     }
-
     audio.addEventListener('timeupdate', () => {
-      if (audio.duration) {
-        bar.style.width = (audio.currentTime / audio.duration * 100) + '%';
-      }
+      if (audio.duration) bar.style.width = (audio.currentTime / audio.duration * 100) + '%';
     });
-
-    // Autoplay on first click anywhere
     document.addEventListener('click', () => {
       if (!playing) toggleMusic();
     }, { once: true });
   </script>
-
 </body>
 </html>
