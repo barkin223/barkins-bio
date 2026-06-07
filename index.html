@@ -1,248 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Barkin</title>
-  <link href="https://fonts.googleapis.com/css2?family=gg+sans:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <title>barki</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: #111;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
       font-family: 'Inter', sans-serif;
-    }
-
-    .card {
-      background: #111214;
-      border-radius: 16px;
-      width: 300px;
-      overflow: hidden;
-      box-shadow: 0 8px 48px rgba(0,0,0,0.6);
-    }
-
-    /* =============================================
-       CUSTOMIZE: Banner — change background-color
-       or swap to background-image: url('YOUR_IMG')
-       ============================================= */
-    .banner {
-      height: 100px;
-      background: #1a1a2e;
-      background-image: linear-gradient(to bottom right, #0d0d1a, #1a1a2e);
-      /* To use a photo: background: url('YOUR_BANNER_URL') center/cover; */
-    }
-
-    .profile-section {
-      padding: 0 16px 16px;
-      position: relative;
-    }
-
-    /* =============================================
-       CUSTOMIZE: Avatar emoji or swap for <img>
-       ============================================= */
-    .avatar-wrap {
-      position: relative;
-      display: inline-block;
-      margin-top: -36px;
-      margin-bottom: 12px;
-    }
-
-    .avatar {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: #5865F2;
-      border: 6px solid #111214;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 2.2rem;
-      overflow: hidden;
-    }
-
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .online-dot {
-      position: absolute;
-      bottom: 4px;
-      right: 4px;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #23a55a;
-      border: 3px solid #111214;
+      position: relative;
     }
 
     /* =============================================
-       CUSTOMIZE: Name
+       CUSTOMIZE: Background — swap url() with your image
+       ============================================= */
+    .bg {
+      position: fixed;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=1200&q=80') center/cover no-repeat;
+      filter: brightness(0.35) grayscale(0.6);
+      z-index: 0;
+    }
+
+    /* Snowflakes */
+    .snow { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+    .flake {
+      position: absolute;
+      top: -20px;
+      color: rgba(255,255,255,0.7);
+      font-size: 1rem;
+      animation: fall linear infinite;
+      user-select: none;
+    }
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Main content */
+    .content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    /* =============================================
+       CUSTOMIZE: Your username
        ============================================= */
     .username {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 2px;
+      font-size: 3rem;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.8);
     }
 
-    /* =============================================
-       CUSTOMIZE: Badges — add/remove emoji badges
-       ============================================= */
-    .badges {
+    /* Info card */
+    .card {
+      background: rgba(30,30,30,0.65);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 18px 24px;
+      width: 100%;
+      text-align: left;
+    }
+
+    .card-row {
       display: flex;
-      gap: 4px;
-      margin-bottom: 10px;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
     }
 
-    .badge {
+    .card-title {
       font-size: 1rem;
-      background: #2b2d31;
-      border-radius: 6px;
-      padding: 3px 5px;
+      font-weight: 600;
+      color: #fff;
     }
 
-    /* =============================================
-       CUSTOMIZE: Bio text
-       ============================================= */
-    .bio {
+    .card-sub {
       font-size: 0.82rem;
-      color: #dbdee1;
-      margin-bottom: 14px;
-      line-height: 1.4;
+      color: #aaa;
+      margin-top: 2px;
     }
 
-    /* Activity card */
-    .activity {
-      background: #2b2d31;
-      border-radius: 10px;
-      padding: 10px;
+    /* Views */
+    .views {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: #ccc;
+      align-self: flex-start;
     }
 
-    .activity-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 8px;
-      background: #1e6fa5;
+    /* Music player */
+    .music {
+      background: rgba(30,30,30,0.65);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 14px 18px;
+      width: 100%;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
+      gap: 14px;
+    }
+
+    .music-icon {
+      font-size: 1.6rem;
+      animation: spin 4s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .music-info { flex: 1; min-width: 0; }
+
+    .music-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .music-sub { font-size: 0.75rem; color: #888; margin-top: 2px; }
+
+    .music-btn {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
       flex-shrink: 0;
     }
+    .music-btn:hover { background: rgba(255,255,255,0.2); }
 
-    .activity-text { flex: 1; min-width: 0; }
-
-    .activity-title {
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: #b5bac1;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 2px;
-    }
-
-    .activity-name {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #fff;
-      white-space: nowrap;
+    /* Progress bar */
+    .progress-wrap {
+      width: 100%;
+      height: 3px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 99px;
+      margin-top: 10px;
       overflow: hidden;
-      text-overflow: ellipsis;
     }
-
-    .activity-detail {
-      font-size: 0.75rem;
-      color: #b5bac1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* =============================================
-       CUSTOMIZE: Social links — change href values
-       ============================================= */
-    .socials {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-    }
-
-    .social-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #2b2d31;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      text-decoration: none;
-      transition: background 0.15s, transform 0.15s;
-      border: none;
-      cursor: pointer;
-    }
-
-    .social-btn:hover {
-      background: #3a3d44;
-      transform: scale(1.1);
+    .progress-bar {
+      height: 100%;
+      background: #fff;
+      border-radius: 99px;
+      width: 0%;
+      transition: width 1s linear;
     }
   </style>
 </head>
 <body>
-  <div class="card">
 
-    <!-- CUSTOMIZE: Banner color is set in CSS above -->
-    <div class="banner"></div>
+  <!-- Background -->
+  <div class="bg"></div>
 
-    <div class="profile-section">
-      <div class="avatar-wrap">
-        <!-- CUSTOMIZE: Change emoji or replace with <img src="YOUR_URL"> -->
-        <div class="avatar">🐱</div>
-        <div class="online-dot"></div>
-      </div>
+  <!-- Snow -->
+  <div class="snow" id="snow"></div>
 
-      <!-- CUSTOMIZE: Your name -->
-      <div class="username">hris</div>
+  <!-- Hidden audio — calming lo-fi music -->
+  <audio id="music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_946f1c9925.mp3" type="audio/mpeg"/>
+  </audio>
 
-      <!-- CUSTOMIZE: Add/remove badges -->
-      <div class="badges">
-        <span class="badge">💎</span>
-        <span class="badge">✖️</span>
-        <span class="badge">✅</span>
-        <span class="badge">🔥</span>
-      </div>
+  <div class="content">
 
-      <!-- CUSTOMIZE: Your bio -->
-      <div class="bio">guns.lol on top</div>
+    <!-- CUSTOMIZE: Change "barki" to your name -->
+    <div class="username">barki</div>
 
-      <!-- CUSTOMIZE: Activity — what you're doing -->
-      <div class="activity">
-        <div class="activity-icon">🎮</div>
-        <div class="activity-text">
-          <div class="activity-title">Playing</div>
-          <div class="activity-name">Visual Studio Code</div>
-          <div class="activity-detail">Editing globals.css</div>
+    <!-- CUSTOMIZE: Your info card -->
+    <div class="card">
+      <div class="card-row">
+        <span style="font-size:1.2rem">🎮</span>
+        <div>
+          <div class="card-title">Playing Visual Studio Code</div>
+          <div class="card-sub">Editing globals.css</div>
         </div>
-      </div>
-
-      <!-- CUSTOMIZE: Social links -->
-      <div class="socials">
-        <a class="social-btn" href="https://yoursite.com" target="_blank" title="Website">🌐</a>
-        <a class="social-btn" href="https://github.com" target="_blank" title="GitHub">🐙</a>
-        <a class="social-btn" href="https://discord.com" target="_blank" title="Discord">💬</a>
       </div>
     </div>
 
+    <!-- Music player -->
+    <div class="music">
+      <div class="music-icon">💿</div>
+      <div class="music-info">
+        <div class="music-title" id="song-title">Lofi Chill</div>
+        <div class="music-sub">calming beats</div>
+        <div class="progress-wrap"><div class="progress-bar" id="progress"></div></div>
+      </div>
+      <button class="music-btn" id="play-btn" onclick="toggleMusic()">▶</button>
+    </div>
+
+    <!-- Views -->
+    <div class="views">👁 0</div>
+
   </div>
+
+  <script>
+    // Snow
+    const snow = document.getElementById('snow');
+    for (let i = 0; i < 30; i++) {
+      const f = document.createElement('div');
+      f.className = 'flake';
+      f.textContent = '❄';
+      f.style.left = Math.random() * 100 + 'vw';
+      f.style.fontSize = (0.6 + Math.random() * 0.8) + 'rem';
+      f.style.animationDuration = (6 + Math.random() * 10) + 's';
+      f.style.animationDelay = (Math.random() * 10) + 's';
+      f.style.opacity = 0.4 + Math.random() * 0.5;
+      snow.appendChild(f);
+    }
+
+    // Music
+    const audio = document.getElementById('music');
+    const btn = document.getElementById('play-btn');
+    const bar = document.getElementById('progress');
+    let playing = false;
+
+    function toggleMusic() {
+      if (playing) {
+        audio.pause();
+        btn.textContent = '▶';
+      } else {
+        audio.play();
+        btn.textContent = '⏸';
+      }
+      playing = !playing;
+    }
+
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) {
+        bar.style.width = (audio.currentTime / audio.duration * 100) + '%';
+      }
+    });
+
+    // Autoplay on first click anywhere
+    document.addEventListener('click', () => {
+      if (!playing) toggleMusic();
+    }, { once: true });
+  </script>
+
 </body>
 </html>
