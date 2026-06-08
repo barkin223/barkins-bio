@@ -118,10 +118,11 @@
 <body>
   <div class="bg"></div>
   <div class="snow" id="snow"></div>
-  <!-- YouTube lofi music embed (hidden) -->
-  <iframe id="yt" width="0" height="0" style="display:none"
-    src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=0&loop=1&playlist=jfKfPfyJRdk"
-    allow="autoplay" frameborder="0"></iframe>
+  <!-- Music using a reliable free MP3 -->
+  <audio id="music" loop preload="auto">
+    <source src="https://upload.wikimedia.org/wikipedia/commons/transcoded/6/6e/Buddy_Rich_and_his_Orchestra_-_norwegian_wood_%28this_bird_has_flown%29.ogg/Buddy_Rich_and_his_Orchestra_-_norwegian_wood_%28this_bird_has_flown%29.ogg.mp3" type="audio/mpeg"/>
+    <source src="https://upload.wikimedia.org/wikipedia/commons/4/4e/BWV_543-fugue.ogg" type="audio/ogg"/>
+  </audio>
 
   <div class="content">
     <div class="username">barki</div>
@@ -187,7 +188,7 @@
         btn.textContent = '▶';
       } else {
         yt.src = yt.src.replace('autoplay=0', 'autoplay=1');
-        btn.textContent = '||';
+        btn.textContent = '⏸';
         // animate progress bar
         let w = 0;
         setInterval(() => { w = (w + 0.01) % 100; bar.style.width = w + '%'; }, 300);
