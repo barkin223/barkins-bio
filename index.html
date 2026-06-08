@@ -103,7 +103,7 @@
     .music-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .music-sub { font-size: 0.75rem; color: #aaa; margin-top: 2px; }
     .progress-wrap { width: 100%; height: 3px; background: rgba(255,255,255,0.15); border-radius: 99px; margin-top: 8px; overflow: hidden; }
-    .progress-bar { height: 100%; background: #e8a040; border-radius: 99px; width: 0%; transition: width 0.1s linear; }
+    .progress-bar { height: 100%; background: #e8a040; border-radius: 99px; width: 0%; transition: width 0.3s linear; }
     .music-btn {
       background: rgba(255,255,255,0.25); border: none; border-radius: 50%;
       width: 40px; height: 40px; color: #fff; font-size: 1.1rem; cursor: pointer;
@@ -119,7 +119,7 @@
   <div class="bg"></div>
   <div class="snow" id="snow"></div>
 
-  <div id="yt-player" style="display: none;"></div>
+  <iframe id="yt-stream" width="0" height="0" src="https://www.youtube.com/embed/jfKfPfyJRdk?enablejsapi=1&controls=0" frameborder="0" style="display:none;"></iframe>
 
   <div class="content">
     <div class="username">barki</div>
@@ -176,69 +176,37 @@
       snow.appendChild(f);
     }
 
-    // --- YouTube Player Logic ---
+    // --- Audio Control Logic ---
+    const iframe = document.getElementById('yt-stream');
     const btn = document.getElementById('play-btn');
     const bar = document.getElementById('progress');
     const disc = document.getElementById('disc');
     
-    let player;
     let playing = false;
     let progressInterval;
-    let apiReady = false;
-
-    // Load YouTube IFrame API dynamically
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('yt-player', {
-        height: '0',
-        width: '0',
-        videoId: 'jfKfPfyJRdk', // Real 24/7 Lofi Stream
-        playerVars: {
-          'playsinline': 1,
-          'controls': 0,
-          'disablekb': 1
-        },
-        events: {
-          'onReady': () => { apiReady = true; },
-          'onStateChange': onPlayerStateChange
-        }
-      });
-    }
+    let currentWidth = 0;
 
     function toggleMusic() {
-      if (!apiReady || !player) return;
-
-      if (playing) {
-        player.pauseVideo();
-      } else {
-        player.playVideo();
-      }
-    }
-
-    function onPlayerStateChange(event) {
-      if (event.data == YT.PlayerState.PLAYING) { 
-        playing = true;
+      const iframeWindow = iframe.contentWindow;
+      
+      if (!playing) {
+        // Direct postMessage instructions bypass script blocking safely
+        iframeWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
         btn.textContent = '⏸';
         disc.style.animationPlayState = 'running';
+        playing = true;
         
+        // Since it's a live lofi stream without a fixed end, we simulate a smooth scrolling progress bar
         progressInterval = setInterval(() => {
-          if (player && player.getDuration) {
-            const currentTime = player.getCurrentTime();
-            const duration = player.getDuration();
-            if (duration > 0) {
-              const percentage = (currentTime / duration) * 100;
-              bar.style.width = percentage + '%';
-            }
-          }
-        }, 200);
+          currentWidth = (currentWidth + 0.5) % 100;
+          bar.style.width = currentWidth + '%';
+        }, 500);
+        
       } else {
-        playing = false;
+        iframeWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
         btn.textContent = '▶';
         disc.style.animationPlayState = 'paused';
+        playing = false;
         clearInterval(progressInterval);
       }
     }
