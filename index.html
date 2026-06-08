@@ -177,28 +177,28 @@
       f.style.opacity = 0.3 + Math.random() * 0.4;
       snow.appendChild(f);
     }
-    const yt = document.getElementById('yt');
+    const audio = document.getElementById('music');
     const btn = document.getElementById('play-btn');
     const bar = document.getElementById('progress');
     let playing = false;
+    let ticker;
 
     function toggleMusic() {
       if (playing) {
-        yt.src = yt.src.replace('autoplay=1', 'autoplay=0');
+        audio.pause();
         btn.textContent = '▶';
+        clearInterval(ticker);
       } else {
-        yt.src = yt.src.replace('autoplay=0', 'autoplay=1');
+        audio.play().catch(e => console.log('play error:', e));
         btn.textContent = '⏸';
-        // animate progress bar
-        let w = 0;
-        setInterval(() => { w = (w + 0.01) % 100; bar.style.width = w + '%'; }, 300);
+        ticker = setInterval(() => {
+          if (audio.duration) bar.style.width = (audio.currentTime / audio.duration * 100) + '%';
+        }, 500);
       }
       playing = !playing;
     }
 
-    document.addEventListener('click', () => {
-      if (!playing) toggleMusic();
-    }, { once: true });
+
   </script>
 </body>
 </html>
