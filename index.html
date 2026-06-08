@@ -97,7 +97,7 @@
       padding: 14px 18px; width: 100%;
       display: flex; align-items: center; gap: 14px;
     }
-    .music-icon { font-size: 1.6rem; animation: spin 4s linear infinite; }
+    .music-icon { font-size: 1.6rem; animation: spin 4s linear infinite; animation-play-state: paused; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .music-info { flex: 1; min-width: 0; }
     .music-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -184,6 +184,7 @@
     let player;
     let playing = false;
     let progressInterval;
+    let apiReady = false;
 
     // Load YouTube IFrame API dynamically
     const tag = document.createElement('script');
@@ -191,25 +192,25 @@
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    // This function runs automatically once the API loads
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('yt-player', {
         height: '0',
         width: '0',
-        videoId: 'jfKfPfyJRdk', // Replace this ID with any YouTube video ID you want!
+        videoId: 'jfKfPfyJRdk', // Real 24/7 Lofi Stream
         playerVars: {
           'playsinline': 1,
           'controls': 0,
           'disablekb': 1
         },
         events: {
+          'onReady': () => { apiReady = true; },
           'onStateChange': onPlayerStateChange
         }
       });
     }
 
     function toggleMusic() {
-      if (!player || typeof player.playVideo !== 'function') return;
+      if (!apiReady || !player) return;
 
       if (playing) {
         player.pauseVideo();
@@ -219,13 +220,11 @@
     }
 
     function onPlayerStateChange(event) {
-      // YT.PlayerState.PLAYING = 1, PAUSED = 2, ENDED = 0
-      if (event.data == 1) { 
+      if (event.data == YT.PlayerState.PLAYING) { 
         playing = true;
         btn.textContent = '⏸';
         disc.style.animationPlayState = 'running';
         
-        // Track and update the progress bar real-time
         progressInterval = setInterval(() => {
           if (player && player.getDuration) {
             const currentTime = player.getCurrentTime();
@@ -243,13 +242,6 @@
         clearInterval(progressInterval);
       }
     }
-
-    // Initial play trigger on first user click anywhere on screen (Required by browser security)
-    document.addEventListener('click', () => {
-      if (!playing && player && typeof player.playVideo === 'function') {
-        player.playVideo();
-      }
-    }, { once: true });
   </script>
 </body>
 </html>
