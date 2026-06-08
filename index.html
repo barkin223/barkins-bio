@@ -120,9 +120,7 @@
   <div class="bg"></div>
   <div class="snow" id="snow"></div>
 
-  <audio id="audio-stream" loop>
-    <source src="data:audio/wav;base64,UklGRigAAABXQVZFlZmZpZmZpZmZpZmZpZmZpZmZpZmZpZmZpZmZpZmZpZmZk=" type="audio/wav">
-  </audio>
+  <audio id="audio-stream" src="https://storage.googleapis.com/ikz-public-assets/lofi-chill.mp3" preload="auto" loop crossorigin="anonymous"></audio>
 
   <div class="content">
     <div class="username">barki</div>
@@ -154,7 +152,7 @@
     <div class="music">
       <div class="music-icon" id="disc">💿</div>
       <div class="music-info">
-        <div class="music-title">Chill Beats</div>
+        <div class="music-title">Lofi Chill</div>
         <div class="music-sub">calming soundtrack</div>
         <div class="progress-wrap"><div class="progress-bar" id="progress"></div></div>
       </div>
@@ -179,26 +177,30 @@
       snow.appendChild(f);
     }
 
-    // --- Unbreakable Audio Logic ---
+    // --- Audio Control Logic ---
     const audio = document.getElementById('audio-stream');
     const btn = document.getElementById('play-btn');
     const bar = document.getElementById('progress');
     const disc = document.getElementById('disc');
     
     let progressInterval;
-    let currentWidth = 0;
 
     function toggleMusic() {
       if (audio.paused) {
-        audio.play();
-        btn.textContent = '⏸';
-        disc.style.animationPlayState = 'running';
-        
-        // Dynamic continuous animation loop for the progress bar
-        progressInterval = setInterval(() => {
-          currentWidth = (currentWidth + 0.5) % 100;
-          bar.style.width = currentWidth + '%';
-        }, 100);
+        audio.play().then(() => {
+          btn.textContent = '⏸';
+          disc.style.animationPlayState = 'running';
+          
+          // Track length tracking loop
+          progressInterval = setInterval(() => {
+            if (audio.duration) {
+              const percentage = (audio.currentTime / audio.duration) * 100;
+              bar.style.width = percentage + '%';
+            }
+          }, 100);
+        }).catch(err => {
+          console.error("Playback failed:", err);
+        });
       } else {
         audio.pause();
         btn.textContent = '▶';
@@ -206,6 +208,14 @@
         clearInterval(progressInterval);
       }
     }
+
+    // Reset when track reaches natural ending point
+    audio.addEventListener('ended', () => {
+      btn.textContent = '▶';
+      disc.style.animationPlayState = 'paused';
+      bar.style.width = '0%';
+      clearInterval(progressInterval);
+    });
   </script>
 </body>
 </html>
