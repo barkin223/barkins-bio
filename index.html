@@ -89,6 +89,7 @@
     .discord-btn { background: #5865F2; }
     .tiktok-btn  { background: #111; border: 1px solid #444; }
 
+    /* Music Widget Container */
     .music {
       background: rgba(0,0,0,0.55);
       backdrop-filter: blur(16px);
@@ -103,7 +104,7 @@
     .music-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .music-sub { font-size: 0.75rem; color: #aaa; margin-top: 2px; }
     .progress-wrap { width: 100%; height: 3px; background: rgba(255,255,255,0.15); border-radius: 99px; margin-top: 8px; overflow: hidden; }
-    .progress-bar { height: 100%; background: #e8a040; border-radius: 99px; width: 0%; transition: width 0.3s linear; }
+    .progress-bar { height: 100%; background: #e8a040; border-radius: 99px; width: 0%; }
     .music-btn {
       background: rgba(255,255,255,0.25); border: none; border-radius: 50%;
       width: 40px; height: 40px; color: #fff; font-size: 1.1rem; cursor: pointer;
@@ -119,7 +120,7 @@
   <div class="bg"></div>
   <div class="snow" id="snow"></div>
 
-  <iframe id="yt-stream" width="0" height="0" src="https://www.youtube.com/embed/jfKfPfyJRdk?enablejsapi=1&controls=0" frameborder="0" style="display:none;"></iframe>
+  <audio id="audio-stream" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto" crossorigin="anonymous"></audio>
 
   <div class="content">
     <div class="username">barki</div>
@@ -151,8 +152,8 @@
     <div class="music">
       <div class="music-icon" id="disc">💿</div>
       <div class="music-info">
-        <div class="music-title">Lofi Chill</div>
-        <div class="music-sub">calming beats</div>
+        <div class="music-title">Chill Beats</div>
+        <div class="music-sub">calming soundtrack</div>
         <div class="progress-wrap"><div class="progress-bar" id="progress"></div></div>
       </div>
       <button class="music-btn" id="play-btn" onclick="toggleMusic()">▶</button>
@@ -176,40 +177,45 @@
       snow.appendChild(f);
     }
 
-    // --- Audio Control Logic ---
-    const iframe = document.getElementById('yt-stream');
+    // --- Fixed Audio Control Logic ---
+    const audio = document.getElementById('audio-stream');
     const btn = document.getElementById('play-btn');
     const bar = document.getElementById('progress');
     const disc = document.getElementById('disc');
     
-    let playing = false;
     let progressInterval;
-    let currentWidth = 0;
 
     function toggleMusic() {
-      const iframeWindow = iframe.contentWindow;
-      
-      if (!playing) {
-        // Direct postMessage instructions bypass script blocking safely
-        iframeWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-        btn.textContent = '⏸';
-        disc.style.animationPlayState = 'running';
-        playing = true;
-        
-        // Since it's a live lofi stream without a fixed end, we simulate a smooth scrolling progress bar
-        progressInterval = setInterval(() => {
-          currentWidth = (currentWidth + 0.5) % 100;
-          bar.style.width = currentWidth + '%';
-        }, 500);
-        
+      if (audio.paused) {
+        audio.play().then(() => {
+          btn.textContent = '⏸';
+          disc.style.animationPlayState = 'running';
+          
+          // Syncs the progress bar dynamically with the track's true length
+          progressInterval = setInterval(() => {
+            if (audio.duration) {
+              const percentage = (audio.currentTime / audio.duration) * 100;
+              bar.style.width = percentage + '%';
+            }
+          }, 100);
+        }).catch(err => {
+          console.error("Playback failed:", err);
+        });
       } else {
-        iframeWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        audio.pause();
         btn.textContent = '▶';
         disc.style.animationPlayState = 'paused';
-        playing = false;
         clearInterval(progressInterval);
       }
     }
+
+    // Reset progress bar interface when track naturally ends
+    audio.addEventListener('ended', () => {
+      btn.textContent = '▶';
+      disc.style.animationPlayState = 'paused';
+      bar.style.width = '0%';
+      clearInterval(progressInterval);
+    });
   </script>
 </body>
 </html>
