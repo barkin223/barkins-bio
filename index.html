@@ -118,9 +118,10 @@
 <body>
   <div class="bg"></div>
   <div class="snow" id="snow"></div>
-  <audio id="music" loop crossorigin="anonymous">
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"/>
-  </audio>
+  <!-- YouTube lofi music embed (hidden) -->
+  <iframe id="yt" width="0" height="0" style="display:none"
+    src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=0&loop=1&playlist=jfKfPfyJRdk"
+    allow="autoplay" frameborder="0"></iframe>
 
   <div class="content">
     <div class="username">barki</div>
@@ -175,18 +176,25 @@
       f.style.opacity = 0.3 + Math.random() * 0.4;
       snow.appendChild(f);
     }
-    const audio = document.getElementById('music');
+    const yt = document.getElementById('yt');
     const btn = document.getElementById('play-btn');
     const bar = document.getElementById('progress');
     let playing = false;
+
     function toggleMusic() {
-      if (playing) { audio.pause(); btn.textContent = '▶'; }
-      else { audio.play(); btn.textContent = '⏸'; }
+      if (playing) {
+        yt.src = yt.src.replace('autoplay=1', 'autoplay=0');
+        btn.textContent = '▶';
+      } else {
+        yt.src = yt.src.replace('autoplay=0', 'autoplay=1');
+        btn.textContent = '';
+        // animate progress bar
+        let w = 0;
+        setInterval(() => { w = (w + 0.01) % 100; bar.style.width = w + '%'; }, 300);
+      }
       playing = !playing;
     }
-    audio.addEventListener('timeupdate', () => {
-      if (audio.duration) bar.style.width = (audio.currentTime / audio.duration * 100) + '%';
-    });
+
     document.addEventListener('click', () => {
       if (!playing) toggleMusic();
     }, { once: true });
