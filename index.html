@@ -103,7 +103,7 @@
     .music-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .music-sub { font-size: 0.75rem; color: #aaa; margin-top: 2px; }
     .progress-wrap { width: 100%; height: 3px; background: rgba(255,255,255,0.15); border-radius: 99px; margin-top: 8px; overflow: hidden; }
-    .progress-bar { height: 100%; background: #e8a040; border-radius: 99px; width: 0%; transition: width 1s linear; }
+    .progress-bar { height: 100%; background: #e8a040; border-radius: 99px; width: 0%; transition: width 0.1s linear; }
     .music-btn {
       background: rgba(255,255,255,0.25); border: none; border-radius: 50%;
       width: 40px; height: 40px; color: #fff; font-size: 1.1rem; cursor: pointer;
@@ -118,11 +118,8 @@
 <body>
   <div class="bg"></div>
   <div class="snow" id="snow"></div>
-  <!-- Music using a reliable free MP3 -->
-  <audio id="music" loop preload="auto">
-    <source src="https://upload.wikimedia.org/wikipedia/commons/transcoded/6/6e/Buddy_Rich_and_his_Orchestra_-_norwegian_wood_%28this_bird_has_flown%29.ogg/Buddy_Rich_and_his_Orchestra_-_norwegian_wood_%28this_bird_has_flown%29.ogg.mp3" type="audio/mpeg"/>
-    <source src="https://upload.wikimedia.org/wikipedia/commons/4/4e/BWV_543-fugue.ogg" type="audio/ogg"/>
-  </audio>
+
+  <div id="yt-player" style="display: none;"></div>
 
   <div class="content">
     <div class="username">barki</div>
@@ -152,7 +149,7 @@
     </div>
 
     <div class="music">
-      <div class="music-icon">💿</div>
+      <div class="music-icon" id="disc">💿</div>
       <div class="music-info">
         <div class="music-title">Lofi Chill</div>
         <div class="music-sub">calming beats</div>
@@ -165,6 +162,7 @@
   </div>
 
   <script>
+    // --- Snow Effect ---
     const snow = document.getElementById('snow');
     for (let i = 0; i < 30; i++) {
       const f = document.createElement('div');
@@ -177,28 +175,81 @@
       f.style.opacity = 0.3 + Math.random() * 0.4;
       snow.appendChild(f);
     }
-    const audio = document.getElementById('music');
+
+    // --- YouTube Player Logic ---
     const btn = document.getElementById('play-btn');
     const bar = document.getElementById('progress');
+    const disc = document.getElementById('disc');
+    
+    let player;
     let playing = false;
-    let ticker;
+    let progressInterval;
 
-    function toggleMusic() {
-      if (playing) {
-        audio.pause();
-        btn.textContent = '▶';
-        clearInterval(ticker);
-      } else {
-        audio.play().catch(e => console.log('play error:', e));
-        btn.textContent = '⏸';
-        ticker = setInterval(() => {
-          if (audio.duration) bar.style.width = (audio.currentTime / audio.duration * 100) + '%';
-        }, 500);
-      }
-      playing = !playing;
+    // Load YouTube IFrame API dynamically
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    // This function runs automatically once the API loads
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('yt-player', {
+        height: '0',
+        width: '0',
+        videoId: 'jfKfPfyJRdk', // Replace this ID with any YouTube video ID you want!
+        playerVars: {
+          'playsinline': 1,
+          'controls': 0,
+          'disablekb': 1
+        },
+        events: {
+          'onStateChange': onPlayerStateChange
+        }
+      });
     }
 
+    function toggleMusic() {
+      if (!player || typeof player.playVideo !== 'function') return;
 
+      if (playing) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
+      }
+    }
+
+    function onPlayerStateChange(event) {
+      // YT.PlayerState.PLAYING = 1, PAUSED = 2, ENDED = 0
+      if (event.data == 1) { 
+        playing = true;
+        btn.textContent = '⏸';
+        disc.style.animationPlayState = 'running';
+        
+        // Track and update the progress bar real-time
+        progressInterval = setInterval(() => {
+          if (player && player.getDuration) {
+            const currentTime = player.getCurrentTime();
+            const duration = player.getDuration();
+            if (duration > 0) {
+              const percentage = (currentTime / duration) * 100;
+              bar.style.width = percentage + '%';
+            }
+          }
+        }, 200);
+      } else {
+        playing = false;
+        btn.textContent = '▶';
+        disc.style.animationPlayState = 'paused';
+        clearInterval(progressInterval);
+      }
+    }
+
+    // Initial play trigger on first user click anywhere on screen (Required by browser security)
+    document.addEventListener('click', () => {
+      if (!playing && player && typeof player.playVideo === 'function') {
+        player.playVideo();
+      }
+    }, { once: true });
   </script>
 </body>
 </html>
