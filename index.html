@@ -3,329 +3,330 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gorilla Tag — Cosmetic Lookup</title>
+<title>gtag cosmetic lookup</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap');
 
-  :root{
-    --bg: #1b1812;
-    --bg-soft: #242019;
-    --card: #2a251c;
-    --card-hover: #322c21;
-    --line: #3a3328;
-    --banana: #f4c542;
-    --banana-deep: #d9a82a;
-    --text: #f1ede2;
-    --text-dim: #a89e89;
-    --text-faint: #6e6552;
-    --tag-bg: #14120e;
-  }
+body {
+	margin:0;
+	padding:0;
+	background:#1b1812;
+	background-image: radial-gradient(circle at 15% 0%, rgba(244,197,66,0.06), transparent 40%), radial-gradient(circle at 85% 100%, rgba(244,197,66,0.04), transparent 45%);
+	color:#f1ede2;
+	font-family:'Inter',sans-serif;
+	min-height:100vh;
+}
+*{box-sizing:border-box}
 
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background: var(--bg);
-    background-image:
-      radial-gradient(circle at 15% 0%, rgba(244,197,66,0.06), transparent 40%),
-      radial-gradient(circle at 85% 100%, rgba(244,197,66,0.04), transparent 45%);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    min-height: 100vh;
-  }
+.wrap{
+	max-width:1100px;
+	margin:0 auto;
+	padding:28px 20px 60px;
+}
 
-  .wrap{
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 28px 20px 60px;
-  }
+header{
+	display:flex;
+	justify-content:space-between;
+	align-items:flex-start;
+	flex-wrap:wrap;
+	gap:18px;
+	border-bottom:1px solid #3a3328;
+	padding-bottom:22px;
+	margin-bottom:22px;
+}
 
-  /* Header row: title left, search top right */
-  header{
-    display:flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 18px;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 22px;
-    margin-bottom: 22px;
-  }
+.title-block h1{
+	font-family:'Space Grotesk',sans-serif;
+	font-weight:700;
+	font-size:30px;
+	letter-spacing:-.01em;
+	margin:0 0 4px;
+}
+.title-block h1 span{ color:#f4c542; }
+.title-block p{
+	margin:0;
+	font-size:13px;
+	color:#a89e89;
+}
+.title-block .credit{
+	font-size:11px;
+	color:#6e6552;
+	margin-top:6px;
+}
+.title-block .credit a{ color:#a89e89; text-decoration:none; }
 
-  .title-block h1{
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 30px;
-    letter-spacing: -0.01em;
-    margin: 0 0 4px 0;
-    color: var(--text);
-  }
-  .title-block h1 span{
-    color: var(--banana);
-  }
-  .title-block p{
-    margin: 0;
-    font-size: 13px;
-    color: var(--text-dim);
-  }
+.search-area{
+	display:flex;
+	flex-direction:column;
+	align-items:flex-end;
+	gap:6px;
+}
+.search-box{ position:relative; width:280px; }
+.search-box input{
+	width:100%;
+	background:#14120e;
+	border:1.5px solid #3a3328;
+	border-radius:10px;
+	padding:11px 38px 11px 14px;
+	color:#f1ede2;
+	font-family:'Inter',sans-serif;
+	font-size:14px;
+	outline:none;
+}
+.search-box input::placeholder{color:#6e6552}
+.search-box input:focus{
+	border-color:#d9a82a;
+	box-shadow:0 0 0 3px rgba(244,197,66,.15);
+}
+.search-box svg{
+	position:absolute; right:12px; top:50%;
+	transform:translateY(-50%);
+	width:16px;height:16px;
+	color:#6e6552;
+	pointer-events:none;
+}
+.result-count{
+	font-family:'JetBrains Mono',monospace;
+	font-size:11.5px;
+	color:#6e6552;
+	padding-right:2px;
+}
+.result-count b{color:#f4c542}
 
-  .search-area{
-    display:flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 6px;
-  }
+#grid{
+	display:grid;
+	grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+	gap:12px;
+}
 
-  .search-box{
-    position: relative;
-    width: 280px;
-  }
-  .search-box input{
-    width: 100%;
-    background: var(--tag-bg);
-    border: 1.5px solid var(--line);
-    border-radius: 10px;
-    padding: 11px 38px 11px 14px;
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-  .search-box input::placeholder{ color: var(--text-faint); }
-  .search-box input:focus{
-    border-color: var(--banana-deep);
-    box-shadow: 0 0 0 3px rgba(244,197,66,0.15);
-  }
-  .search-box svg{
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 16px;
-    height: 16px;
-    color: var(--text-faint);
-    pointer-events: none;
-  }
-  .result-count{
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11.5px;
-    color: var(--text-faint);
-    padding-right: 2px;
-  }
-  .result-count b{ color: var(--banana); }
+.card{
+	background:#2a251c;
+	border:1px solid #3a3328;
+	border-radius:12px;
+	padding:14px 14px 12px;
+	position:relative;
+	overflow:hidden;
+}
+.card:hover{
+	background:#322c21;
+	border-color:#d9a82a;
+}
+.card::before{
+	content:"";
+	position:absolute;
+	top:0;left:0;
+	width:4px;height:100%;
+	background:#f4c542;
+	opacity:0;
+}
+.card:hover::before{opacity:1}
 
-  /* Grid of cards */
-  #grid{
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 12px;
-  }
+.card .eyebrow{
+	font-family:'JetBrains Mono',monospace;
+	font-size:9.5px;
+	letter-spacing:.06em;
+	text-transform:uppercase;
+	color:#6e6552;
+	margin-bottom:8px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+.card .name{
+	font-family:'Space Grotesk',sans-serif;
+	font-weight:700;
+	font-size:16px;
+	margin-bottom:10px;
+	line-height:1.25;
+}
+.card .tag-row{
+	display:flex;
+	align-items:center;
+	justify-content:space-between;
+	gap:8px;
+}
+.card .id-tag{
+	font-family:'JetBrains Mono',monospace;
+	font-size:12.5px;
+	font-weight:600;
+	color:#1b1812;
+	background:#f4c542;
+	border-radius:6px;
+	padding:3px 9px;
+}
+.card .copy-btn{
+	background:none;
+	border:none;
+	color:#6e6552;
+	cursor:pointer;
+	font-size:11px;
+	font-family:'Inter',sans-serif;
+	padding:3px 6px;
+	border-radius:5px;
+}
+.card .copy-btn:hover{ color:#f4c542; background:#14120e; }
+.card .copy-btn.copied{ color:#8fd19e; }
 
-  .card{
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 14px 14px 12px;
-    transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
-    position: relative;
-    overflow: hidden;
-  }
-  .card:hover{
-    background: var(--card-hover);
-    border-color: var(--banana-deep);
-    transform: translateY(-2px);
-  }
-  .card::before{
-    content: "";
-    position: absolute;
-    top: 0; left: 0;
-    width: 4px; height: 100%;
-    background: var(--banana);
-    opacity: 0;
-    transition: opacity 0.12s ease;
-  }
-  .card:hover::before{ opacity: 1; }
+mark{
+	background:rgba(244,197,66,.35);
+	color:#f1ede2;
+	border-radius:3px;
+	padding:0 1px;
+}
 
-  .card .eyebrow{
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9.5px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-faint);
-    margin-bottom: 8px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .card .name{
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 16px;
-    color: var(--text);
-    margin-bottom: 10px;
-    line-height: 1.25;
-  }
-  .card .tag-row{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-  .card .id-tag{
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12.5px;
-    font-weight: 600;
-    color: var(--bg);
-    background: var(--banana);
-    border-radius: 6px;
-    padding: 3px 9px;
-    letter-spacing: 0.02em;
-  }
-  .card .copy-btn{
-    background: none;
-    border: none;
-    color: var(--text-faint);
-    cursor: pointer;
-    font-size: 11px;
-    font-family: 'Inter', sans-serif;
-    padding: 3px 6px;
-    border-radius: 5px;
-    transition: color 0.12s ease, background 0.12s ease;
-  }
-  .card .copy-btn:hover{
-    color: var(--banana);
-    background: var(--tag-bg);
-  }
-  .card .copy-btn.copied{ color: #8fd19e; }
+.empty-state{
+	text-align:center;
+	padding:70px 20px;
+	color:#6e6552;
+	font-family:'Space Grotesk',sans-serif;
+	font-size:15px;
+	grid-column:1/-1;
+}
+.empty-state .big{ font-size:34px; margin-bottom:8px; opacity:.6; }
 
-  mark{
-    background: rgba(244,197,66,0.35);
-    color: var(--text);
-    border-radius: 3px;
-    padding: 0 1px;
-  }
+footer{
+	text-align:center;
+	margin-top:36px;
+	color:#6e6552;
+	font-size:11.5px;
+}
+footer .credit{ margin-top:4px; }
 
-  .empty-state{
-    text-align: center;
-    padding: 70px 20px;
-    color: var(--text-faint);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 15px;
-    grid-column: 1 / -1;
-  }
-  .empty-state .big{
-    font-size: 34px;
-    margin-bottom: 8px;
-    opacity: 0.6;
-  }
+@media (max-width:640px){
+	header{flex-direction:column;align-items:stretch}
+	.search-area{align-items:stretch}
+	.search-box{width:100%}
+	.title-block h1{font-size:24px}
+}
 
-  footer{
-    text-align: center;
-    margin-top: 36px;
-    color: var(--text-faint);
-    font-size: 11.5px;
-  }
-
-  @media (max-width: 640px){
-    header{ flex-direction: column; align-items: stretch; }
-    .search-area{ align-items: stretch; }
-    .search-box{ width: 100%; }
-    .title-block h1{ font-size: 24px; }
-  }
-
-  /* Keyboard focus visibility */
-  .copy-btn:focus-visible,
-  .search-box input:focus-visible{
-    outline: 2px solid var(--banana);
-    outline-offset: 2px;
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    *{ transition: none !important; }
-  }
+.copy-btn:focus-visible, .search-box input:focus-visible{
+	outline:2px solid #f4c542;
+	outline-offset:2px;
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="title-block">
-        <h1>Cosmetic <span>Lookup</span></h1>
-        <p id="totalLine">Loading…</p>
-      </div>
-      <div class="search-area">
-        <div class="search-box">
-          <input id="searchInput" type="text" placeholder="Search cosmetic name…" autocomplete="off" aria-label="Search cosmetic name">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </div>
-        <div class="result-count" id="resultCount"></div>
-      </div>
-    </header>
+<div class="wrap">
 
-    <div id="grid"></div>
+	<header>
+		<div class="title-block">
+			<h1>Cosmetic <span>Lookup</span></h1>
+			<p id="totalLine">loading...</p>
+			<div class="credit">made by barkin</div>
+		</div>
+		<div class="search-area">
+			<div class="search-box">
+				<input id="searchInput" type="text" placeholder="search cosmetic name..." autocomplete="off" aria-label="Search cosmetic name">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+			</div>
+			<div class="result-count" id="resultCount"></div>
+		</div>
+	</header>
 
-    <footer>684 cosmetics · source: gorillatag.fandom.com/wiki/Cosmetics</footer>
-  </div>
+	<div id="grid"></div>
+
+	<footer>
+		684 cosmetics · source: gorillatag.fandom.com/wiki/Cosmetics
+		<div class="credit">made by barkin</div>
+	</footer>
+
+</div>
 
 <script>
-  const DATA = [{"c":"EARLY ACCESS SUPPORTER DLC","n":"Early Access Badge","i":"LBAAE"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Chrome Cowboy Hat","i":"LHABB"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Sunny Sunhat","i":"LHABA"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Aviators","i":"LFAAN"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Banana Hat","i":"LHAAA"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Cloche","i":"LHAAM"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Coconut","i":"LHAAK"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Cowboy Hat","i":"LHAAN"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Fez","i":"LHAAO"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Sunhat","i":"LHAAL"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Tortoiseshell Sunglasses","i":"LFAAM"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Top Hat","i":"LHAAP"},{"c":"CITY COSMETICS","n":"Baseball Cap","i":"LHAAF"},{"c":"CITY COSMETICS","n":"Basic Beanie","i":"LHAAQ"},{"c":"CITY COSMETICS","n":"Cat Ears","i":"LHAAB"},{"c":"CITY COSMETICS","n":"Chefs Hat","i":"LHABC"},{"c":"CITY COSMETICS","n":"Flower Crown","i":"LHAAS"},{"c":"CITY COSMETICS","n":"Forehead Mirror","i":"LHAAH"},{"c":"CITY COSMETICS","n":"Golden Head","i":"LHAAG"},{"c":"CITY COSMETICS","n":"Headphones1","i":"LHABP"},{"c":"CITY COSMETICS","n":"Party Hat","i":"LHAAC"},{"c":"CITY COSMETICS","n":"Pineapple Hat","i":"LHAAI"},{"c":"CITY COSMETICS","n":"Sweatband","i":"LHAAE"},{"c":"CITY COSMETICS","n":"Monke Cap","i":"LHACY"},{"c":"CITY COSMETICS","n":"Gorilla Face Cap","i":"LHACZ"},{"c":"CITY COSMETICS","n":"Banana Logo Cap","i":"LHACV"},{"c":"CITY COSMETICS","n":"Ushanka","i":"LHAAD"},{"c":"CITY COSMETICS","n":"White Fedora","i":"LHAAR"},{"c":"CITY COSMETICS","n":"Witch Hat","i":"LHAAJ"},{"c":"CITY COSMETICS","n":"Basic Earrings","i":"LFAAC"},{"c":"CITY COSMETICS","n":"Basic Scarf","i":"LBAAC"},{"c":"CITY COSMETICS","n":"Big Eyebrows","i":"LFAAA"},{"c":"CITY COSMETICS","n":"Boxy Sunglasses","i":"LFABC"},{"c":"CITY COSMETICS","n":"Double Eyepatch","i":"LFAAJ"},{"c":"CITY COSMETICS","n":"Eyebrow Stud","i":"LFAAE"},{"c":"CITY COSMETICS","n":"Goggles","i":"LFAAK"},{"c":"CITY COSMETICS","n":"Left Eyepatch","i":"LFAAI"},{"c":"CITY COSMETICS","n":"Nose Ring","i":"LFAAB"},{"c":"CITY COSMETICS","n":"Right Eyepatch","i":"LFAAH"},{"c":"CITY COSMETICS","n":"Round Sunglasses","i":"LFAAO"},{"c":"CITY COSMETICS","n":"Skull Mask","i":"LFAAG"},{"c":"CITY COSMETICS","n":"Surgical Mask","i":"LFAAL"},{"c":"CITY COSMETICS","n":"Triangle Sunglasses","i":"LFAAF"},{"c":"CITY COSMETICS","n":"Bowtie","i":"LBAAB"},{"c":"CITY COSMETICS","n":"Canyon Pin","i":"LBAAG"},{"c":"CITY COSMETICS","n":"City Pin","i":"LBAAH"},{"c":"CITY COSMETICS","n":"Crystals Pin","i":"LBAAF"},{"c":"CITY COSMETICS","n":"Gorilla Pin","i":"LBAAI"},{"c":"CITY COSMETICS","n":"Mountain Pin","i":"LBABH"},{"c":"CITY COSMETICS","n":"Neck Scarf","i":"LBAAJ"},{"c":"CITY COSMETICS","n":"Tree Pin","i":"LBAAA"},{"c":"CITY COSMETICS","n":"Banana Logo Tee","i":"LBACA"},{"c":"CITY COSMETICS","n":"I Love GT Tee","i":"LBACD"},{"c":"CITY COSMETICS","n":"Gorilla Tag Flag","i":"LMABP"},{"c":"BALLOON COSMETICS","n":"Chocolate Donut Balloon","i":"LMAAS"},{"c":"BALLOON COSMETICS","n":"Pink Donut Balloon","i":"LMABD"},{"c":"HALLOWEEN (2021)","n":"Mummy Wrap","i":"LFAAQ"},{"c":"HALLOWEEN (2021)","n":"Paperbag Hat","i":"LHAAT"},{"c":"HALLOWEEN (2021)","n":"Pirate Bandana","i":"LHAAZ"},{"c":"HALLOWEEN (2021)","n":"Pumpkin Hat","i":"LHAAU"},{"c":"HALLOWEEN (2021)","n":"Witch Nose","i":"LFAAP"},{"c":"AUTUMN (2021)","n":"Face Scarf","i":"LFAAW"},{"c":"AUTUMN (2021)","n":"Maple Leaf","i":"LFAAV"},{"c":"AUTUMN (2021)","n":"Turkey Finger Puppet","i":"LBAAQ"},{"c":"AUTUMN (2021)","n":"Turkey Leg","i":"LBAAP"},{"c":"HOLIDAY (2021)","n":"2022 Glasses","i":"LFAAZ"},{"c":"HOLIDAY (2021)","n":"Candy Cane","i":"LBAAR"},{"c":"HOLIDAY (2021)","n":"Elf Hat","i":"LHABG"},{"c":"HOLIDAY (2021)","n":"Gift Hat","i":"LHABF"},{"c":"HOLIDAY (2021)","n":"Nose Snowflake","i":"LFABA"},{"c":"HOLIDAY (2021)","n":"Ornament Earrings","i":"LFAAY"},{"c":"HOLIDAY (2021)","n":"Snowman Hat","i":"LHABE"},{"c":"HOLIDAY (2021)","n":"Sparkler","i":"LBAAS"},{"c":"WINTER (2022)","n":"Black Earmuffs","i":"LHABM"},{"c":"WINTER (2022)","n":"Blue Pompom Hat","i":"LHABI"},{"c":"WINTER (2022)","n":"Green Earmuffs","i":"LHABN"},{"c":"WINTER (2022)","n":"Icicle","i":"LBAAT"},{"c":"WINTER (2022)","n":"Orange Pompom Hat","i":"LHABH"},{"c":"WINTER (2022)","n":"Pattern Pompom Hat","i":"LHABK"},{"c":"WINTER (2022)","n":"Pink Earmuffs","i":"LHABO"},{"c":"WINTER (2022)","n":"Rosy Cheeks","i":"LFABB"},{"c":"WINTER (2022)","n":"Stripe Pompom Hat","i":"LHABJ"},{"c":"WINTER (2022)","n":"White Earmuffs","i":"LHABL"},{"c":"VALENTINES (2022)","n":"Black Rose","i":"LBAAX"},{"c":"VALENTINES (2022)","n":"Box Of Chocolates Hat","i":"LHABQ"},{"c":"VALENTINES (2022)","n":"Chest Heart","i":"LBAAU"},{"c":"VALENTINES (2022)","n":"Golden Rose","i":"LBAAY"},{"c":"VALENTINES (2022)","n":"Heart Glasses","i":"LFABD"},{"c":"VALENTINES (2022)","n":"Heart Pompom Hat","i":"LHABR"},{"c":"VALENTINES (2022)","n":"Pink Rose","i":"LBAAW"},{"c":"VALENTINES (2022)","n":"Red Rose","i":"LBAAV"},{"c":"1ST ANNIVERSARY (2022)","n":"GT1 Badge","i":"LBAAZ"},{"c":"1ST ANNIVERSARY (2022)","n":"Thumb Party Hats","i":"LBABA"},{"c":"HOUSEHOLD (2022)","n":"Cookie Jar","i":"LFABE"},{"c":"HOUSEHOLD (2022)","n":"Golden Utensils","i":"LBABE"},{"c":"HOUSEHOLD (2022)","n":"Golden Wrench","i":"LBABC"},{"c":"HOUSEHOLD (2022)","n":"Plunger","i":"LHABS"},{"c":"HOUSEHOLD (2022)","n":"Regular Utensils","i":"LBABD"},{"c":"HOUSEHOLD (2022)","n":"Regular Wrench","i":"LBABB"},{"c":"HOUSEHOLD (2022)","n":"Saucepan","i":"LHABT"},{"c":"SPRING (2022)","n":"Bite Onion","i":"LFABF"},{"c":"SPRING (2022)","n":"Blue Lily Hat","i":"LHABX"},{"c":"SPRING (2022)","n":"Brown Bunny Ears","i":"LHABV"},{"c":"SPRING (2022)","n":"Cherry Blossom Branch","i":"LMAAA"},{"c":"SPRING (2022)","n":"Emperor Nose Butterfly","i":"LFABG"},{"c":"SPRING (2022)","n":"Four Leaf Clover","i":"LBABF"},{"c":"SPRING (2022)","n":"Golden Four Leaf Clover","i":"LBABG"},{"c":"SPRING (2022)","n":"Leprechaun Hat","i":"LHABW"},{"c":"SPRING (2022)","n":"Purple Lily Hat","i":"LHABY"},{"c":"SPRING (2022)","n":"White Bunny Ears","i":"LHABU"},{"c":"RAINY (2022)","n":"Black Umbrella","i":"LMAAF"},{"c":"RAINY (2022)","n":"Cloud Hand Boots","i":"LMAAD"},{"c":"RAINY (2022)","n":"Colorful Umbrella","i":"LMAAG"},{"c":"RAINY (2022)","n":"Forehead Egg","i":"LFABH"},{"c":"RAINY (2022)","n":"Golden Hand Boots","i":"LMAAE"},{"c":"RAINY (2022)","n":"Golden Umbrella","i":"LMAAH"},{"c":"RAINY (2022)","n":"Painted Egg Hat","i":"LHACA"},{"c":"RAINY (2022)","n":"Pocket Gorilla Bun Blue","i":"LBABK"},{"c":"RAINY (2022)","n":"Pocket Gorilla Bun Pink","i":"LBABL"},{"c":"RAINY (2022)","n":"Pocket Gorilla Bun Yellow","i":"LBABJ"},{"c":"RAINY (2022)","n":"Yellow Hand Boots","i":"LMAAC"},{"c":"RAINY (2022)","n":"Yellow Rain Hat","i":"LHABZ"},{"c":"RAINY (2022)","n":"Yellow Rain Shawl","i":"LBABI"},{"c":"MUSIC (2022)","n":"Acoustic Guitar","i":"LMAAI"},{"c":"MUSIC (2022)","n":"Black Longhair Wig","i":"LHACB"},{"c":"MUSIC (2022)","n":"Bongos","i":"LBABM"},{"c":"MUSIC (2022)","n":"Drum Set","i":"LBABN"},{"c":"MUSIC (2022)","n":"Electric Guitar","i":"LMAAK"},{"c":"MUSIC (2022)","n":"Electro Helm","i":"LHACD"},{"c":"MUSIC (2022)","n":"Golden Acoustic Guitar","i":"LMAAJ"},{"c":"MUSIC (2022)","n":"Golden Electric Guitar","i":"LMAAL"},{"c":"MUSIC (2022)","n":"Lightning Makeup","i":"LFABI"},{"c":"MUSIC (2022)","n":"Red Longhair Wig","i":"LHACC"},{"c":"SUMMER (2022)","n":"Black Shutter Shades","i":"LFABK"},{"c":"SUMMER (2022)","n":"Blue Shutter Shades","i":"LFABJ"},{"c":"SUMMER (2022)","n":"Bubbler","i":"LMAAM"},{"c":"SUMMER (2022)","n":"Flamingo Floatie","i":"LBABP"},{"c":"SUMMER (2022)","n":"Green Shutter Shades","i":"LFABL"},{"c":"SUMMER (2022)","n":"Popsicle","i":"LMAAN"},{"c":"SUMMER (2022)","n":"Red Shutter Shades","i":"LFABM"},{"c":"SUMMER (2022)","n":"Rubber Duckie","i":"LMAAO"},{"c":"SUMMER (2022)","n":"Seagull","i":"LHACE"},{"c":"SUMMER (2022)","n":"Spilled Ice Cream","i":"LBABO"},{"c":"SUMMER (2022)","n":"Sunburn","i":"LFABN"},{"c":"SUMMER (2022)","n":"Sunscreen","i":"LFABO"},{"c":"PAINTBRAWL (2022)","n":"Paintball Forest Vest","i":"LBABR"},{"c":"PAINTBRAWL (2022)","n":"Paintball Forest Visor","i":"LFABP"},{"c":"PAINTBRAWL (2022)","n":"Paintball Gorilla Armor","i":"LBABT"},{"c":"PAINTBRAWL (2022)","n":"Paintball Snow Vest","i":"LBABQ"},{"c":"PAINTBRAWL (2022)","n":"Paintball Snow Visor","i":"LFABQ"},{"c":"HALLOWEEN (2022)","n":"Bulging Googly Eyes","i":"LFABS"},{"c":"HALLOWEEN (2022)","n":"Candy Bar Fun Size","i":"LMAAZ"},{"c":"HALLOWEEN (2022)","n":"Deadshot","i":"LMABB"},{"c":"HALLOWEEN (2022)","n":"Ghost Balloon","i":"LMAAX"},{"c":"HALLOWEEN (2022)","n":"Giant Candy Bar","i":"LMAAY"},{"c":"HALLOWEEN (2022)","n":"Pumpkin Head Happy","i":"LHACJ"},{"c":"HALLOWEEN (2022)","n":"Pumpkin Head Scary","i":"LHACK"},{"c":"HALLOWEEN (2022)","n":"Slinky Eyes","i":"LFABV"},{"c":"HALLOWEEN (2022)","n":"Spider Web Umbrella","i":"LMABA"},{"c":"HALLOWEEN (2022)","n":"Unicorn Staff","i":"LMAAW"},{"c":"HALLOWEEN (2022)","n":"Yorick","i":"LMABC"},{"c":"FALL (2022)","n":"Balloon Turkey","i":"LMABH"},{"c":"FALL (2022)","n":"Candy Apple","i":"LMABI"},{"c":"FALL (2022)","n":"Caramel Apple","i":"LMABJ"},{"c":"FALL (2022)","n":"Corn on the Cob","i":"LMABN"},{"c":"FALL (2022)","n":"Cranberry Can","i":"LMABF"},{"c":"FALL (2022)","n":"Finger Olives","i":"LMABO"},{"c":"FALL (2022)","n":"Frying Pan","i":"LMABG"},{"c":"FALL (2022)","n":"Ladle","i":"LMABL"},{"c":"FALL (2022)","n":"Mouth Wheat","i":"LFABW"},{"c":"FALL (2022)","n":"Pie Hat","i":"LHACP"},{"c":"FALL (2022)","n":"Pie Slice","i":"LMABK"},{"c":"FALL (2022)","n":"Scarecrow Hat","i":"LHACQ"},{"c":"FALL (2022)","n":"Turkey Leg 22","i":"LMABM"},{"c":"FALL (2022)","n":"Turkey Toy","i":"LMABE"},{"c":"LAUNCH (2022)","n":"Angel Wings","i":"LHACX"},{"c":"LAUNCH (2022)","n":"Become Monke Rings","i":"LMACA"},{"c":"LAUNCH (2022)","n":"Big Head","i":"LHACW"},{"c":"LAUNCH (2022)","n":"Cloud Hat","i":"LHACR"},{"c":"LAUNCH (2022)","n":"Cloud Slingshot","i":"LMABV"},{"c":"LAUNCH (2022)","n":"Cloud Tee","i":"LBACG"},{"c":"LAUNCH (2022)","n":"Cloud Umbrella","i":"LMABX"},{"c":"LAUNCH (2022)","n":"Explorer Set","i":"LSAAN"},{"c":"LAUNCH (2022)","n":"Gorilla Balloon","i":"LMABW"},{"c":"LAUNCH (2022)","n":"Gorilla Diamond Rings","i":"LMABY"},{"c":"LAUNCH (2022)","n":"Happy Sad Flag","i":"LMABQ"},{"c":"LAUNCH (2022)","n":"Party Horn","i":"LMABS"},{"c":"LAUNCH (2022)","n":"Pinwheel","i":"LMABU"},{"c":"LAUNCH (2022)","n":"Stump Head","i":"LHACS"},{"c":"LAUNCH (2022)","n":"Toy Frog","i":"LMABT"},{"c":"LAUNCH (2022)","n":"Tux Tee","i":"LBACE"},{"c":"HOLIDAY (2022)","n":"2023 Glasses","i":"LFABX"},{"c":"HOLIDAY (2022)","n":"Christmas Umbrella 22","i":"LMACJ"},{"c":"HOLIDAY (2022)","n":"Evil Santa Set","i":"LSAAR"},{"c":"HOLIDAY (2022)","n":"Giant Candy Cane","i":"LMACL"},{"c":"HOLIDAY (2022)","n":"Gingerbread Man","i":"LMACB"},{"c":"HOLIDAY (2022)","n":"Holiday Pudding","i":"LMACC"},{"c":"HOLIDAY (2022)","n":"Mittens","i":"LMACK"},{"c":"HOLIDAY (2022)","n":"Reindeer Antlers","i":"LHADD"},{"c":"HOLIDAY (2022)","n":"Rudolph Nose","i":"LFABY"},{"c":"HOLIDAY (2022)","n":"Santa Set 22","i":"LSAAP"},{"c":"HOLIDAY (2022)","n":"Snowflake and Deer Rings","i":"LMACH"},{"c":"HOLIDAY (2022)","n":"Snowman Set","i":"LSAAQ"},{"c":"HOLIDAY (2022)","n":"Snowman Top Hat","i":"LHADH"},{"c":"HOLIDAY (2022)","n":"Stocking Hat","i":"LHADG"},{"c":"HOLIDAY (2022)","n":"Toy Gorilla Elf","i":"LMACI"},{"c":"HOLIDAY (2022)","n":"Tree and Snowman Rings","i":"LMACG"},{"c":"JANUARY WINTER (2023)","n":"Big Ear Muffs","i":"LFACB"},{"c":"JANUARY WINTER (2023)","n":"Cocoa Mug","i":"LMACP"},{"c":"JANUARY WINTER (2023)","n":"Eggplant Mittens","i":"LMACO"},{"c":"JANUARY WINTER (2023)","n":"Eggplant Sweater","i":"LBACO"},{"c":"JANUARY WINTER (2023)","n":"Face Scarf 23","i":"LFACC"},{"c":"JANUARY WINTER (2023)","n":"Frostburn Mittens","i":"LMACN"},{"c":"JANUARY WINTER (2023)","n":"Frostburn Sweater","i":"LBACN"},{"c":"JANUARY WINTER (2023)","n":"Full Head Beanie","i":"LHADI"},{"c":"JANUARY WINTER (2023)","n":"Ice Cube Head","i":"LHADJ"},{"c":"JANUARY WINTER (2023)","n":"Puffy Ski Jacket","i":"LBACL"},{"c":"JANUARY WINTER (2023)","n":"Ski Goggles","i":"LFACD"},{"c":"JANUARY WINTER (2023)","n":"Snow Owl Mask","i":"LHADK"},{"c":"JANUARY WINTER (2023)","n":"Snow Shovel","i":"LMACR"},{"c":"JANUARY WINTER (2023)","n":"Snowflake Mittens","i":"LMACM"},{"c":"JANUARY WINTER (2023)","n":"Snowflake Sweater","i":"LBACM"},{"c":"JANUARY WINTER (2023)","n":"Snowflake Wand","i":"LMACQ"},{"c":"JANUARY WINTER (2023)","n":"Squeezy Penguin","i":"LMACS"},{"c":"JANUARY WINTER (2023)","n":"Ushanka 23","i":"LHADL"},{"c":"2ND ANNIVERSARY (2023)","n":"GT2 Badge","i":"LBACQ"},{"c":"2ND ANNIVERSARY (2023)","n":"2nd Anniversary Cupcake","i":"LMACT"},{"c":"VALENTINES (2023)","n":"Heart Sweater","i":"LBACS"},{"c":"VALENTINES (2023)","n":"Hearts Headband","i":"LHADM"},{"c":"VALENTINES (2023)","n":"Mint Heart Candy Balloon","i":"LMACW"},{"c":"VALENTINES (2023)","n":"Pink Heart Candy Balloon","i":"LMACV"},{"c":"VALENTINES (2023)","n":"Teddy Bear","i":"LMACY"},{"c":"FEBRUARY WINTER (2023)","n":"Carrot Nose","i":"LFACE"},{"c":"FEBRUARY WINTER (2023)","n":"Champion Ring 23","i":"LMACZ"},{"c":"FEBRUARY WINTER (2023)","n":"Dog Toy","i":"LMADA"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Gloves A","i":"LMADF"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Helmet A","i":"LHADO"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Jersey A","i":"LBACV"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Stick A","i":"LMADJ"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Gloves B","i":"LMADG"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Helmet B","i":"LHADP"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Jersey B","i":"LBACW"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Stick B","i":"LMADK"},{"c":"FEBRUARY WINTER (2023)","n":"Hot Snack","i":"LMADB"},{"c":"FEBRUARY WINTER (2023)","n":"Ice Slingshot","i":"LMADC"},{"c":"FEBRUARY WINTER (2023)","n":"Moose Antlers","i":"LHADN"},{"c":"FEBRUARY WINTER (2023)","n":"Paw Badge","i":"LBACT"},{"c":"FEBRUARY WINTER (2023)","n":"Penguin Hat","i":"LHADQ"},{"c":"FEBRUARY WINTER (2023)","n":"Penguin Suit","i":"LBACU"},{"c":"FEBRUARY WINTER (2023)","n":"Polar Bear Set","i":"LSAAT"},{"c":"FEBRUARY WINTER (2023)","n":"Polar Teddy Bear","i":"LMADD"},{"c":"FEBRUARY WINTER (2023)","n":"Snow Blower","i":"LMADH"},{"c":"FEBRUARY WINTER (2023)","n":"Winter Umbrella 23","i":"LMADE"},{"c":"BASEMENT (2023)","n":"Barbarian Set","i":"LSAAX"},{"c":"BASEMENT (2023)","n":"Bard Lute","i":"LMADR"},{"c":"BASEMENT (2023)","n":"Dragon Balloon","i":"LMADN"},{"c":"BASEMENT (2023)","n":"Dwarven Beard","i":"LFACJ"},{"c":"BASEMENT (2023)","n":"Elf Ears","i":"LFACI"},{"c":"BASEMENT (2023)","n":"Elven Bow","i":"LMADU"},{"c":"BASEMENT (2023)","n":"King Badge","i":"LBADA"},{"c":"BASEMENT (2023)","n":"Knight Set","i":"LSAAW"},{"c":"BASEMENT (2023)","n":"Magic Ring","i":"LMADT"},{"c":"BASEMENT (2023)","n":"Orc Set","i":"LSAAY"},{"c":"BASEMENT (2023)","n":"Peasant Haircut","i":"LHADU"},{"c":"BASEMENT (2023)","n":"Squeezy Dragon","i":"LMADM"},{"c":"BASEMENT (2023)","n":"Wizard Set","i":"LSAAV"},{"c":"BASEMENT (2023)","n":"Wizard Staff","i":"LMADV"},{"c":"SPRING CLEANING (2023)","n":"Broom","i":"LMAEB"},{"c":"SPRING CLEANING (2023)","n":"Cheese Wedge","i":"LMAEC"},{"c":"SPRING CLEANING (2023)","n":"Daisy Badge","i":"LBADC"},{"c":"SPRING CLEANING (2023)","n":"Daisy Balloon","i":"LMADX"},{"c":"SPRING CLEANING (2023)","n":"Duster","i":"LMAEA"},{"c":"SPRING CLEANING (2023)","n":"Dustpan","i":"LMAEG"},{"c":"SPRING CLEANING (2023)","n":"Fly Head","i":"LHADY"},{"c":"SPRING CLEANING (2023)","n":"Green Rubber Gloves","i":"LMAEJ"},{"c":"SPRING CLEANING (2023)","n":"Hand Vacuum","i":"LMADY"},{"c":"SPRING CLEANING (2023)","n":"Kitchen Apron","i":"LBADD"},{"c":"SPRING CLEANING (2023)","n":"Mop Hat","i":"LHADW"},{"c":"SPRING CLEANING (2023)","n":"Mouse Mask","i":"LFACK"},{"c":"SPRING CLEANING (2023)","n":"Mouse Trap","i":"LMAEE"},{"c":"SPRING CLEANING (2023)","n":"Pot Lid","i":"LMAED"},{"c":"SPRING CLEANING (2023)","n":"Red Laundry Basket","i":"LHADZ"},{"c":"SPRING CLEANING (2023)","n":"Rolling Pin","i":"LMAEH"},{"c":"SPRING CLEANING (2023)","n":"Spatula","i":"LMADW"},{"c":"SPRING CLEANING (2023)","n":"Sponge","i":"LMAEF"},{"c":"SPRING CLEANING (2023)","n":"Squeezy Bumblebee","i":"LMADZ"},{"c":"SPRING CLEANING (2023)","n":"White Laundry Basket","i":"LHADX"},{"c":"SPRING CLEANING (2023)","n":"Yellow Rubber Gloves","i":"LMAEI"},{"c":"WILD WEST MAKEOVER (2023)","n":"Banjo","i":"LMAEK"},{"c":"WILD WEST MAKEOVER (2023)","n":"Horse Stick","i":"LMAEM"},{"c":"WILD WEST MAKEOVER (2023)","n":"Miner Hat","i":"LHAEA"},{"c":"WILD WEST MAKEOVER (2023)","n":"Outlaw Bandana","i":"LFACL"},{"c":"WILD WEST MAKEOVER (2023)","n":"Outlaw Hat","i":"LHAEB"},{"c":"WILD WEST MAKEOVER (2023)","n":"Pickaxe","i":"LMAEN"},{"c":"WILD WEST MAKEOVER (2023)","n":"Squeezy Coyote","i":"LMAEL"},{"c":"SUMMER SPLASH (2023)","n":"Arm Floaties","i":"LBADM"},{"c":"SUMMER SPLASH (2023)","n":"Beach Ball Umbrella","i":"LMAET"},{"c":"SUMMER SPLASH (2023)","n":"Beach Straw Hat","i":"LHAEE"},{"c":"SUMMER SPLASH (2023)","n":"Coconut Drink","i":"LMAEU"},{"c":"SUMMER SPLASH (2023)","n":"Ducky Floaty","i":"LBADI"},{"c":"SUMMER SPLASH (2023)","n":"Hawaiian Shirt","i":"LBADL"},{"c":"SUMMER SPLASH (2023)","n":"Hot Dog","i":"LMAEQ"},{"c":"SUMMER SPLASH (2023)","n":"Hula Outfit","i":"LBADH"},{"c":"SUMMER SPLASH (2023)","n":"Merfolk Set","i":"LSAAZ"},{"c":"SUMMER SPLASH (2023)","n":"Muscle Trunks","i":"LBADK"},{"c":"SUMMER SPLASH (2023)","n":"Octopus Hat","i":"LHAEC"},{"c":"SUMMER SPLASH (2023)","n":"Palm Tree Sunglasses","i":"LFACM"},{"c":"SUMMER SPLASH (2023)","n":"Shark Head","i":"LHAED"},{"c":"SUMMER SPLASH (2023)","n":"Smiling Sun Balloon","i":"LMAER"},{"c":"SUMMER SPLASH (2023)","n":"Squeezy Shark","i":"LMAEP"},{"c":"SUMMER SPLASH (2023)","n":"Waffle Cone Ice Cream","i":"LMAES"},{"c":"SUMMER CELEBRATION (2023)","n":"Bug Spray","i":"LMAFA"},{"c":"SUMMER CELEBRATION (2023)","n":"Camping Backpack","i":"LBADO"},{"c":"SUMMER CELEBRATION (2023)","n":"Cardboard Binoculars","i":"LMAFB"},{"c":"SUMMER CELEBRATION (2023)","n":"Chromatic Sunglasses","i":"LFACO"},{"c":"SUMMER CELEBRATION (2023)","n":"Compass","i":"LMAFC"},{"c":"SUMMER CELEBRATION (2023)","n":"Cool Guy Outfit","i":"LBADP"},{"c":"SUMMER CELEBRATION (2023)","n":"Gem Pop Ring","i":"LMAEZ"},{"c":"SUMMER CELEBRATION (2023)","n":"Marshmallow Skewer","i":"LMAFE"},{"c":"SUMMER CELEBRATION (2023)","n":"Milkshake","i":"LMAFF"},{"c":"SUMMER CELEBRATION (2023)","n":"Monke Candle","i":"LMAFG"},{"c":"SUMMER CELEBRATION (2023)","n":"Monke Ice Cream","i":"LMAFD"},{"c":"SUMMER CELEBRATION (2023)","n":"Mustache","i":"LFACP"},{"c":"SUMMER CELEBRATION (2023)","n":"Propeller Cap","i":"LHAEF"},{"c":"SUMMER CELEBRATION (2023)","n":"Safari Set","i":"LSABB"},{"c":"SUMMER CELEBRATION (2023)","n":"Sports Visor","i":"LHAEI"},{"c":"SUMMER CELEBRATION (2023)","n":"Squeezy Dolphin","i":"LMAFH"},{"c":"SUMMER CELEBRATION (2023)","n":"Stars Top Hat","i":"LHAEH"},{"c":"SUMMER CELEBRATION (2023)","n":"Suitcase","i":"LMAFI"},{"c":"SUMMER CELEBRATION (2023)","n":"Summer Hawaiian Shirt","i":"LBADQ"},{"c":"CRYSTAL CAVERNS (2023)","n":"Bat Balloon","i":"LMAFJ"},{"c":"CRYSTAL CAVERNS (2023)","n":"Bat Mask","i":"LFACQ"},{"c":"CRYSTAL CAVERNS (2023)","n":"Bat Wings","i":"LBADR"},{"c":"CRYSTAL CAVERNS (2023)","n":"Crystal Caves Badge","i":"LBADS"},{"c":"CRYSTAL CAVERNS (2023)","n":"Crystal Mohawk","i":"LHAEJ"},{"c":"CRYSTAL CAVERNS (2023)","n":"Crystal Necklace","i":"LBADT"},{"c":"CRYSTAL CAVERNS (2023)","n":"Crystal Ring","i":"LMAFK"},{"c":"CRYSTAL CAVERNS (2023)","n":"Crystal Umbrella","i":"LMAFL"},{"c":"CRYSTAL CAVERNS (2023)","n":"Crystal Whistle","i":"LMAFM"},{"c":"CRYSTAL CAVERNS (2023)","n":"Crystal Xylophone","i":"LBADU"},{"c":"CRYSTAL CAVERNS (2023)","n":"Dino Fossil Hat","i":"LHAEK"},{"c":"CRYSTAL CAVERNS (2023)","n":"Edible Mushroom","i":"LMAFP"},{"c":"CRYSTAL CAVERNS (2023)","n":"Flare","i":"LMAFQ"},{"c":"CRYSTAL CAVERNS (2023)","n":"Geode","i":"LMAFR"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes Blue","i":"LFACT"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes Green","i":"LFACU"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes Orange","i":"LFACV"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes Purple","i":"LFACW"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes Red","i":"LFACS"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes Teal","i":"LFACX"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes White","i":"LFACY"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes Yellow","i":"LFACZ"},{"c":"CRYSTAL CAVERNS (2023)","n":"Hand Drill","i":"LMAFO"},{"c":"CRYSTAL CAVERNS (2023)","n":"Miner Goggles","i":"LFACR"},{"c":"CRYSTAL CAVERNS (2023)","n":"Mushroom Hat","i":"LHAEL"},{"c":"CRYSTAL CAVERNS (2023)","n":"Squeezy Eel","i":"LMAFS"},{"c":"BACK TO SCHOOL (2023)","n":"Apple","i":"LMAFT"},{"c":"BACK TO SCHOOL (2023)","n":"Backpack","i":"LMAGC"},{"c":"BACK TO SCHOOL (2023)","n":"Backwards Cap","i":"LHAEP"},{"c":"BACK TO SCHOOL (2023)","n":"Braces","i":"LFADB"},{"c":"BACK TO SCHOOL (2023)","n":"Canvas Shoes","i":"LMAFY"},{"c":"BACK TO SCHOOL (2023)","n":"Coach Whistle","i":"LMAFU"},{"c":"BACK TO SCHOOL (2023)","n":"Emo Hair","i":"LHAEO"},{"c":"BACK TO SCHOOL (2023)","n":"Emo Makeup","i":"LFADA"},{"c":"BACK TO SCHOOL (2023)","n":"Marching Band Drum","i":"LBADZ"},{"c":"BACK TO SCHOOL (2023)","n":"Marching Band Hat","i":"LHAEN"},{"c":"BACK TO SCHOOL (2023)","n":"Nerd Glasses","i":"LFADC"},{"c":"BACK TO SCHOOL (2023)","n":"Novelty Pencil","i":"LMAGA"},{"c":"BACK TO SCHOOL (2023)","n":"Pocket Protector Shirt","i":"LBADW"},{"c":"BACK TO SCHOOL (2023)","n":"School Bus Balloon","i":"LMAFV"},{"c":"BACK TO SCHOOL (2023)","n":"School Uniform","i":"LBADY"},{"c":"BACK TO SCHOOL (2023)","n":"Spiral Glasses","i":"LFADD"},{"c":"BACK TO SCHOOL (2023)","n":"Spitball Straw","i":"LMAFZ"},{"c":"BACK TO SCHOOL (2023)","n":"Troop Ring","i":"LMAFX"},{"c":"BACK TO SCHOOL (2023)","n":"Varsity Jacket","i":"LBADX"},{"c":"BACK TO SCHOOL (2023)","n":"Water Bottle","i":"LMAFW"},{"c":"FOREST LAVA (2023)","n":"Combusted Hair","i":"LHAER"},{"c":"FOREST LAVA (2023)","n":"Finger Torch","i":"LMAGH"},{"c":"FOREST LAVA (2023)","n":"Fire Fan","i":"LMAGI"},{"c":"FOREST LAVA (2023)","n":"Flaming Cap","i":"LHAEQ"},{"c":"FOREST LAVA (2023)","n":"Hot Hot Pepper","i":"LMAGG"},{"c":"FOREST LAVA (2023)","n":"Lava Badge","i":"LBAEA"},{"c":"FOREST LAVA (2023)","n":"Lava Conch Shell","i":"LMAGF"},{"c":"FOREST LAVA (2023)","n":"Lava Ring","i":"LMAGM"},{"c":"FOREST LAVA (2023)","n":"Magma Mug","i":"LMAGK"},{"c":"FOREST LAVA (2023)","n":"Magmabrella","i":"LMAGO"},{"c":"FOREST LAVA (2023)","n":"Molten Rock Slingshot","i":"LMAGJ"},{"c":"FOREST LAVA (2023)","n":"Singed Straw Hat","i":"LHAES"},{"c":"FOREST LAVA (2023)","n":"Singed Tee","i":"LBAEC"},{"c":"FOREST LAVA (2023)","n":"Squeezy Phoenix","i":"LMAGL"},{"c":"FOREST LAVA (2023)","n":"Volcanist Gloves","i":"LMAGP"},{"c":"FOREST LAVA (2023)","n":"Volcanist Hood","i":"LHAET"},{"c":"FOREST LAVA (2023)","n":"Volcanist Suit","i":"LBAEE"},{"c":"FOREST LAVA (2023)","n":"Volcano Hammer","i":"LMAGQ"},{"c":"FOREST LAVA (2023)","n":"Volcano Hat","i":"LHAEU"},{"c":"FOREST LAVA (2023)","n":"Volcano Tee","i":"LBAED"},{"c":"HALLOWEEN (2023)","n":"Cauldron Concoction","i":"LMAGW"},{"c":"HALLOWEEN (2023)","n":"Clown Mask","i":"LFADH"},{"c":"HALLOWEEN (2023)","n":"Devil Pitchfork","i":"LMAGY"},{"c":"HALLOWEEN (2023)","n":"Franken Flat Top","i":"LHAEX"},{"c":"HALLOWEEN (2023)","n":"Gold Skeleton Cap","i":"LHAEY"},{"c":"HALLOWEEN (2023)","n":"Gothic Dress","i":"LBAEH"},{"c":"HALLOWEEN (2023)","n":"Gummy Spider","i":"LMAGV"},{"c":"HALLOWEEN (2023)","n":"Mephistopheles Mask","i":"LFADG"},{"c":"HALLOWEEN (2023)","n":"Mummy Mitts","i":"LMAGU"},{"c":"HALLOWEEN (2023)","n":"Opera Masque","i":"LFADI"},{"c":"HALLOWEEN (2023)","n":"Poltergeist Pipes","i":"LBAEI"},{"c":"HALLOWEEN (2023)","n":"Salem Squeezy","i":"LMAGS"},{"c":"HALLOWEEN (2023)","n":"Skeleton Body","i":"LBAEG"},{"c":"HALLOWEEN (2023)","n":"Skeleton Cap","i":"LHAEW"},{"c":"HALLOWEEN (2023)","n":"Skull Guitar","i":"LMAGZ"},{"c":"HALLOWEEN (2023)","n":"Spooky Stories Ring","i":"LMAGX"},{"c":"HALLOWEEN (2023)","n":"Sweet Tooth","i":"LFADF"},{"c":"FALL (2023)","n":"Pumpkin Pie Hat","i":"LHAEZ"},{"c":"FALL (2023)","n":"Bonnet","i":"LHAFA"},{"c":"FALL (2023)","n":"Pilgrim Hat","i":"LHAFB"},{"c":"FALL (2023)","n":"Big Turkey Hat","i":"LHAFC"},{"c":"FALL (2023)","n":"Big Turkey Suit","i":"LBAEJ"},{"c":"FALL (2023)","n":"Cooked Dinner Suit","i":"LBAEK"},{"c":"FALL (2023)","n":"Turkey Face Tee","i":"LBAEL"},{"c":"FALL (2023)","n":"Turkey Dinner Tee","i":"LBAEM"},{"c":"FALL (2023)","n":"Autumn Scarf","i":"LBAEN"},{"c":"FALL (2023)","n":"Apple Pie Slice","i":"LMAHA"},{"c":"FALL (2023)","n":"Squeezy Squirrel","i":"LMAHB"},{"c":"FALL (2023)","n":"Gravy Boat","i":"LMAHD"},{"c":"FALL (2023)","n":"Maple Leaf Balloon","i":"LMAHE"},{"c":"HOLIDAY (2023)","n":"2024 Glasses","i":"LFADK"},{"c":"HOLIDAY (2023)","n":"Dreidel","i":"LMAHG"},{"c":"HOLIDAY (2023)","n":"Hand Bell","i":"LMAHI"},{"c":"HOLIDAY (2023)","n":"Ice Staff","i":"LMAHK"},{"c":"HOLIDAY (2023)","n":"Monke Cracker Toy","i":"LMAHO"},{"c":"HOLIDAY (2023)","n":"Owl Nest Hat","i":"LHAFD"},{"c":"HOLIDAY (2023)","n":"Snow Globe","i":"LMAHM"},{"c":"HOLIDAY (2023)","n":"Stuffed Monke","i":"LMAHN"},{"c":"HOLIDAY (2023)","n":"Tree Cookie","i":"LMAHP"},{"c":"HOLIDAY (2023)","n":"Train Engineer Hat","i":"LHAFE"},{"c":"HOLIDAY (2023)","n":"Gold Gift Hat","i":"LHAFF"},{"c":"HOLIDAY (2023)","n":"Hollyday Glasses","i":"LFADJ"},{"c":"HOLIDAY (2023)","n":"Ugly Sweater 23","i":"LBAEP"},{"c":"HOLIDAY (2023)","n":"Sleigh Tee","i":"LBAEQ"},{"c":"HOLIDAY (2023)","n":"Tangled Lights","i":"LBAER"},{"c":"HOLIDAY (2023)","n":"Wood Train Whistle","i":"LMAHS"},{"c":"HOLIDAY (2023)","n":"Snowflake Badge","i":"LBAEO"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Lightning Rod","i":"LMAHT"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Stopwatch","i":"LMAHV"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Tuning Fork","i":"LMAHW"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Magnifying Glass","i":"LMAHX"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Paper Airplane","i":"LMAHY"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Horseshoe Magnet","i":"LMAIA"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Tin Foil","i":"LHAFH"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Tesla Coil Hat","i":"LHAFI"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Respirator","i":"LFADL"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Safety Goggles","i":"LFADM"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Atomic Badge","i":"LBAET"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Monkeodic Table Tee","i":"LBAEV"},{"c":"SCIENCE EXPERIMENT (2024)","n":"X-Ray Board","i":"LBAEW"},{"c":"3RD ANNIVERSARY (2024)","n":"GT3 Anniversary Badge","i":"LBAFN"},{"c":"3RD ANNIVERSARY (2024)","n":"3rd Anniversary Cake","i":"LMAIL"},{"c":"I LAVA YOU (2024)","n":"Queen Tiara","i":"LHAFL"},{"c":"I LAVA YOU (2024)","n":"King Crown","i":"LHAFM"},{"c":"I LAVA YOU (2024)","n":"Firefighter Hat","i":"LHAFN"},{"c":"I LAVA YOU (2024)","n":"Flame Hair","i":"LHAFO"},{"c":"I LAVA YOU (2024)","n":"Cupid Arrow Headband","i":"LHAFP"},{"c":"I LAVA YOU (2024)","n":"Candy Lips","i":"LFADN"},{"c":"I LAVA YOU (2024)","n":"Doe Eyes","i":"LFADO"},{"c":"I LAVA YOU (2024)","n":"Queen of Hearts Garb","i":"LBAFJ"},{"c":"I LAVA YOU (2024)","n":"King of Hearts Garb","i":"LBAFK"},{"c":"I LAVA YOU (2024)","n":"Flaming Heart Badge","i":"LBAFL"},{"c":"I LAVA YOU (2024)","n":"Be-Monke Board","i":"LBAFM"},{"c":"I LAVA YOU (2024)","n":"Squeezy Heart","i":"LMAIJ"},{"c":"I LAVA YOU (2024)","n":"Flaming Heart Staff","i":"LMAIK"},{"c":"I LAVA YOU (2024)","n":"Candy Bracelet","i":"LMAIM"},{"c":"I LAVA YOU (2024)","n":"Chocolate Pepper","i":"LMAIN"},{"c":"THIS IS FIRE (2024)","n":"Flame Thrower","i":"LMAII"},{"c":"THIS IS FIRE (2024)","n":"Fire Extinguisher","i":"LMAIH"},{"c":"NOWRUZ (2024)","n":"Bee Antennae","i":"LHAFR"},{"c":"NOWRUZ (2024)","n":"Rain Cloud","i":"LHAFS"},{"c":"NOWRUZ (2024)","n":"Wheatgrass","i":"LHAFT"},{"c":"NOWRUZ (2024)","n":"Fish Bowl","i":"LHAFU"},{"c":"NOWRUZ (2024)","n":"Tiger Ears","i":"LHAFV"},{"c":"NOWRUZ (2024)","n":"Fabric Earrings","i":"LFADP"},{"c":"NOWRUZ (2024)","n":"Bee Nose","i":"LFADQ"},{"c":"NOWRUZ (2024)","n":"Bee Wings","i":"LBAFT"},{"c":"NOWRUZ (2024)","n":"Persian Skirt","i":"LBAFU"},{"c":"NOWRUZ (2024)","n":"Fish Badge","i":"LBAFV"},{"c":"NOWRUZ (2024)","n":"Tiger Tail","i":"LBAFW"},{"c":"NOWRUZ (2024)","n":"Tiger Fur","i":"LBAFX"},{"c":"NOWRUZ (2024)","n":"Spring Puppets","i":"LMAIR"},{"c":"NOWRUZ (2024)","n":"Persian Rug Umbrella","i":"LMAIS"},{"c":"NOWRUZ (2024)","n":"Gragger Toy","i":"LMAIT"},{"c":"NOWRUZ (2024)","n":"Chocolate Bunny","i":"LMAIU"},{"c":"NOWRUZ (2024)","n":"Watering Can","i":"LMAIV"},{"c":"NOWRUZ (2024)","n":"Bee Balloon","i":"LMAIX"},{"c":"HOPPING SPRING (2024)","n":"Ragdoll Bunny","i":"LMAIW"},{"c":"HOPPING SPRING (2024)","n":"Giant Yellow Bunny","i":"LMAIY"},{"c":"HOPPING SPRING (2024)","n":"Giant Pink Bunny","i":"LMAIZ"},{"c":"FLYING MONKES (2024)","n":"Cloud Pompadour","i":"LHAFX"},{"c":"FLYING MONKES (2024)","n":"Birdhouse Hat","i":"LHAFY"},{"c":"FLYING MONKES (2024)","n":"Flying Ace Cap","i":"LHAFZ"},{"c":"FLYING MONKES (2024)","n":"Bird Beak","i":"LFADR"},{"c":"FLYING MONKES (2024)","n":"Flying Ace Stache","i":"LFADS"},{"c":"FLYING MONKES (2024)","n":"Gold Aviators","i":"LFADT"},{"c":"FLYING MONKES (2024)","n":"Aviator Goggles","i":"LFADU"},{"c":"FLYING MONKES (2024)","n":"Bird Fur","i":"LBAFZ"},{"c":"FLYING MONKES (2024)","n":"Trail Smoker","i":"LBAGA"},{"c":"FLYING MONKES (2024)","n":"Flying Ace Jacket","i":"LBAGB"},{"c":"FLYING MONKES (2024)","n":"Long Scarf","i":"LBAGC"},{"c":"FLYING MONKES (2024)","n":"Pilot Badge","i":"LBAGD"},{"c":"FLYING MONKES (2024)","n":"Storming Umbrella","i":"LMAJC"},{"c":"FLYING MONKES (2024)","n":"Checkered Flag","i":"LMAJE"},{"c":"FLYING MONKES (2024)","n":"Painted Flames Flag","i":"LMAJF"},{"c":"FLYING MONKES (2024)","n":"Leaf Shuriken Olive","i":"LMAJH"},{"c":"FLYING MONKES (2024)","n":"Leaf Shuriken Tawny","i":"LMAJI"},{"c":"DUNGEON MAZE (2024)","n":"Horn Cap","i":"LHAGA"},{"c":"DUNGEON MAZE (2024)","n":"Samurai Helm","i":"LHAGC"},{"c":"DUNGEON MAZE (2024)","n":"Dragon Visage","i":"LFADV"},{"c":"DUNGEON MAZE (2024)","n":"Oni Mask","i":"LFADW"},{"c":"DUNGEON MAZE (2024)","n":"D20 Badge","i":"LBAGE"},{"c":"DUNGEON MAZE (2024)","n":"Dragon Scales","i":"LBAGG"},{"c":"DUNGEON MAZE (2024)","n":"Fairy Wings","i":"LBAGH"},{"c":"DUNGEON MAZE (2024)","n":"Samurai Armor","i":"LBAGI"},{"c":"DUNGEON MAZE (2024)","n":"Dragon Wings","i":"LBAGK"},{"c":"DUNGEON MAZE (2024)","n":"Monke Hand Banner","i":"LMAJJ"},{"c":"DUNGEON MAZE (2024)","n":"Classic D6","i":"LMAJK"},{"c":"DUNGEON MAZE (2024)","n":"Classic D20","i":"LMADQ"},{"c":"DUNGEON MAZE (2024)","n":"Cosmic D6","i":"LMAJL"},{"c":"DUNGEON MAZE (2024)","n":"Cosmic D20","i":"LMAJN"},{"c":"DUNGEON MAZE (2024)","n":"Dragon Claws","i":"LMAJO"},{"c":"DUNGEON MAZE (2024)","n":"Dragon Slingshot","i":"LMAJP"},{"c":"DUNGEON MAZE (2024)","n":"Yumi Bow","i":"LMAJQ"},{"c":"MEDIEVAL MELODIES (2024)","n":"Fireball","i":"LMAJM"},{"c":"PRIDE JAM (2024)","n":"Rainbow Mohawk","i":"LHAGE"},{"c":"PRIDE JAM (2024)","n":"Rainbow Facepaint","i":"LFADX"},{"c":"PRIDE JAM (2024)","n":"Purple Heart Glasses","i":"LFADY"},{"c":"PRIDE JAM (2024)","n":"Rainbow Cape","i":"LBAGM"},{"c":"PRIDE JAM (2024)","n":"He Badge","i":"LBAGN"},{"c":"PRIDE JAM (2024)","n":"She Badge","i":"LBAGO"},{"c":"PRIDE JAM (2024)","n":"They Badge","i":"LBAGP"},{"c":"PRIDE JAM (2024)","n":"Allygator Tee","i":"LBAGQ"},{"c":"PRIDE JAM (2024)","n":"Zebra Fur","i":"LBAGR"},{"c":"PRIDE JAM (2024)","n":"Rainbow Claws","i":"LMAJR"},{"c":"PRIDE JAM (2024)","n":"Pride Flag","i":"LMAJS"},{"c":"PRIDE JAM (2024)","n":"Trans Pride Flag","i":"LMAJT"},{"c":"PRIDE JAM (2024)","n":"Glitter Gun","i":"LMAJU"},{"c":"PRIDE JAM (2024)","n":"Keytar","i":"LMAJV"},{"c":"PRIDE JAM (2024)","n":"Lion Plushy","i":"LMAJW"},{"c":"PRIDE JAM (2024)","n":"Rainbow Lion Plushy","i":"LMAJX"},{"c":"PRIDE JAM (2024)","n":"Pride Rock Ring","i":"LMAJY"},{"c":"WET N' WILD WEST (2024)","n":"Rainbow Umbrella","i":"LMAJZ"},{"c":"WET N' WILD WEST (2024)","n":"Waves Umbrella","i":"LMAKB"},{"c":"WET N' WILD WEST (2024)","n":"Fiery Umbrella","i":"LMAKA"},{"c":"METRO (2024)","n":"Pizza The Hat","i":"LHAGH"},{"c":"METRO (2024)","n":"Cream Cheese Bagel","i":"LMAKD"},{"c":"METRO (2024)","n":"Liberty Robes","i":"LBAGW"},{"c":"METRO (2024)","n":"Liberty Torch","i":"LMAKI"},{"c":"METRO (2024)","n":"Liberty Tiara","i":"LHAGJ"},{"c":"METRO (2024)","n":"Monocle","i":"LFADZ"},{"c":"METRO (2024)","n":"Shield Badge","i":"LBAGT"},{"c":"METRO (2024)","n":"Robber Cap","i":"LHAGI"},{"c":"METRO (2024)","n":"Robber Mask","i":"LFAEA"},{"c":"METRO (2024)","n":"Robber Suit","i":"LBAGV"},{"c":"METRO (2024)","n":"Dumbbell","i":"LMAKF"},{"c":"METRO (2024)","n":"Angryrilla","i":"LHAGG"},{"c":"METRO (2024)","n":"Gorilla Grips","i":"LMAKG"},{"c":"METRO (2024)","n":"Gorilla Fur","i":"LBAGX"},{"c":"METRO (2024)","n":"RC Blimp","i":"LMAKJ"},{"c":"METRO (2024)","n":"Monke Candle Purple","i":"LMAKK"},{"c":"METRO (2024)","n":"Monke Candle Green","i":"LMAKL"},{"c":"METRO (2024)","n":"RWB Sparkler","i":"LMAKM"},{"c":"METRO (2024)","n":"Red Sparkler","i":"LMAKN"},{"c":"METRO (2024)","n":"White Sparkler","i":"LMAKO"},{"c":"METRO (2024)","n":"Blue Sparkler","i":"LMAKP"},{"c":"METRO (2024)","n":"Pretzel Balloon","i":"LMAKE"},{"c":"CAN'T SEA ME (2024)","n":"Clamshell Hat","i":"LHAGK"},{"c":"CAN'T SEA ME (2024)","n":"Hammerhead Hat","i":"LHAGL"},{"c":"CAN'T SEA ME (2024)","n":"Hibiscus Hair","i":"LHAGM"},{"c":"CAN'T SEA ME (2024)","n":"Pufferfish Hat","i":"LHAGO"},{"c":"CAN'T SEA ME (2024)","n":"Pinchy Crab","i":"LFAEB"},{"c":"CAN'T SEA ME (2024)","n":"Shark Badge","i":"LBAGY"},{"c":"CAN'T SEA ME (2024)","n":"Leopard Shark Fur","i":"LBAGZ"},{"c":"CAN'T SEA ME (2024)","n":"Muscle Suit","i":"LBAHA"},{"c":"CAN'T SEA ME (2024)","n":"Pineapple Hawaiian Shirt","i":"LBAHC"},{"c":"CAN'T SEA ME (2024)","n":"Pink Hawaiian Shirt","i":"LBAHD"},{"c":"CAN'T SEA ME (2024)","n":"Conch Shell","i":"LMAKQ"},{"c":"CAN'T SEA ME (2024)","n":"Lifeguard Floaty","i":"LMAKR"},{"c":"CAN'T SEA ME (2024)","n":"Orca Balloon","i":"LMAKS"},{"c":"CAN'T SEA ME (2024)","n":"Fishy Fingies","i":"LMAKU"},{"c":"CAN'T SEA ME (2024)","n":"RC Shark Plane","i":"LMAKW"},{"c":"FUNKY FOSSILS (2024)","n":"Pelican","i":"LHAGN"},{"c":"NEON ROCKET (2024)","n":"Player 1 Badge","i":"LBAHG"},{"c":"NEON ROCKET (2024)","n":"Player 2 Badge","i":"LBAHH"},{"c":"NEON ROCKET (2024)","n":"3D Glasses","i":"LFAEG"},{"c":"NEON ROCKET (2024)","n":"Arcade Badge","i":"LBAHF"},{"c":"NEON ROCKET (2024)","n":"Arcade Carpet Tee","i":"LBAHK"},{"c":"NEON ROCKET (2024)","n":"Blue Wam Tee","i":"LBAHM"},{"c":"NEON ROCKET (2024)","n":"Can O Spinach Squeezy","i":"LMALD"},{"c":"NEON ROCKET (2024)","n":"Dino Feet","i":"LMALC"},{"c":"NEON ROCKET (2024)","n":"Game Over Tee","i":"LBAHL"},{"c":"NEON ROCKET (2024)","n":"Lightshow Toy","i":"LMAKX"},{"c":"NEON ROCKET (2024)","n":"Milk Carton","i":"LMAKZ"},{"c":"NEON ROCKET (2024)","n":"Chocolate Milk Carton","i":"LMALA"},{"c":"NEON ROCKET (2024)","n":"Strawberry Milk Carton","i":"LMALB"},{"c":"NEON ROCKET (2024)","n":"Monkefingers","i":"LMAKY"},{"c":"NEON ROCKET (2024)","n":"Orange Wam Tee","i":"LBAHN"},{"c":"NEON ROCKET (2024)","n":"Planet Hat","i":"LHAGP"},{"c":"NEON ROCKET (2024)","n":"Rubberband Ball","i":"LHAGQ"},{"c":"NEON ROCKET (2024)","n":"Salsa Dance Shirt","i":"LBAHI"},{"c":"NEON ROCKET (2024)","n":"Salsa Dance Skirt","i":"LBAHJ"},{"c":"NEON ROCKET (2024)","n":"Whack A Monke Squeezy","i":"LMALG"},{"c":"NEON ROCKET (2024)","n":"Wobbly Dino Hat","i":"LHAGR"},{"c":"NEON ROCKET (2024)","n":"Bass Guitar","i":"LMALF"},{"c":"NEON ROCKET (2024)","n":"Flying V Guitar","i":"LMALE"},{"c":"NEON ROCKET (2024)","n":"Rose In Mouth","i":"LFAEF"},{"c":"EARNED COSMETICS","n":"Monkeye Badge","i":"LBADB"},{"c":"EARNED COSMETICS","n":"Squeezy Monkeye","i":"LMADS"},{"c":"EARNED COSMETICS","n":"Soda Drip Tee","i":"LBAEX"},{"c":"EARNED COSMETICS","n":"Monkeye Tee","i":"LBAGJ"},{"c":"DAILY TEE","n":"Button Down Tropical","i":"LBAEY"},{"c":"DAILY TEE","n":"Cherry Tee","i":"LBAEZ"},{"c":"DAILY TEE","n":"Denim Vest Blue","i":"LBAFA"},{"c":"DAILY TEE","n":"Doug Tee","i":"LBAFB"},{"c":"DAILY TEE","n":"Marty Vest","i":"LBAFC"},{"c":"DAILY TEE","n":"Matt Blue Tee","i":"LBAFD"},{"c":"DAILY TEE","n":"Orange Tee","i":"LBAFE"},{"c":"DAILY TEE","n":"Pineapple Tee","i":"LBAFF"},{"c":"DAILY TEE","n":"Planet Group Tee","i":"LBAFG"},{"c":"DAILY TEE","n":"Ring Planet Tee","i":"LBAFH"},{"c":"DAILY TEE","n":"Rocket Tee","i":"LBAFO"},{"c":"DAILY TEE","n":"Strawberry Tee","i":"LBAFP"},{"c":"DAILY TEE","n":"Watermelon Tee","i":"LBAFQ"},{"c":"DAILY TEE","n":"Wolf Moon Tee","i":"LBAFR"},{"c":"LAUNCH BUNDLE","n":"Day 1 Cap","i":"LHADA"},{"c":"LAUNCH BUNDLE","n":"Launch Day Tee","i":"LBACF"},{"c":"SWEETHEART BUNDLE","n":"Cupid Outfit","i":"LBACR"},{"c":"SWEETHEART BUNDLE","n":"Cupid Bow","i":"LMACU"},{"c":"SWEETHEART BUNDLE","n":"Heart Ring","i":"LMACX"},{"c":"POT O' GOLD BUNDLE","n":"Pot O Gold","i":"LMADL"},{"c":"SUMMER SPLASH BUNDLE","n":"Scuba Goggles","i":"LFACN"},{"c":"SUMMER SPLASH BUNDLE","n":"Scuba Tank","i":"LBADJ"},{"c":"SUMMER SPLASH BUNDLE","n":"Dive Watch","i":"LMAEO"},{"c":"CRYSTAL CAVERN BUNDLE","n":"Hazard Hat","i":"LHAEM"},{"c":"CRYSTAL CAVERN BUNDLE","n":"Safety Vest","i":"LBADV"},{"c":"CRYSTAL CAVERN BUNDLE","n":"Monke Time Watch","i":"LMAFN"},{"c":"SPIDER MONKE BUNDLE","n":"Spider Abdomen","i":"LBAEF"},{"c":"SPIDER MONKE BUNDLE","n":"Spidey Slinger","i":"LMAGR"},{"c":"SPIDER MONKE BUNDLE","n":"Spider Cephalothorax","i":"LHAEV"},{"c":"HOLIDAY FIR BUNDLE","n":"Hand Saw","i":"LMAHJ"},{"c":"HOLIDAY FIR BUNDLE","n":"Fir Hat","i":"LHAFG"},{"c":"HOLIDAY FIR BUNDLE","n":"Fir Coat","i":"LBAES"},{"c":"MAD SCIENTIST BUNDLE","n":"Smart Brain","i":"LHAFJ"},{"c":"MAD SCIENTIST BUNDLE","n":"Lab Coat","i":"LBAEU"},{"c":"MAD SCIENTIST BUNDLE","n":"Toy Ray Gun","i":"LMAHU"},{"c":"I LAVA YOU BUNDLE","n":"Anteros Hat","i":"LHAFK"},{"c":"I LAVA YOU BUNDLE","n":"Anteros Cloth","i":"LBAFI"},{"c":"I LAVA YOU BUNDLE","n":"Anteros Bow","i":"LMAIG"},{"c":"BEEKEEPER BUNDLE","n":"Beekeeper Hat","i":"LHAFQ"},{"c":"BEEKEEPER BUNDLE","n":"Beekeeper Suit","i":"LBAFS"},{"c":"BEEKEEPER BUNDLE","n":"Beekeeper Smoker","i":"LMAIQ"},{"c":"LEAF NINJA BUNDLE","n":"Leaf Ninja Hood","i":"LHAFW"},{"c":"LEAF NINJA BUNDLE","n":"Leaf Wrappings","i":"LBAFY"},{"c":"LEAF NINJA BUNDLE","n":"Leaf Shuriken","i":"LMAJB"},{"c":"MONKE MONK BUNDLE","n":"Monk Haircut","i":"LHAGB"},{"c":"MONKE MONK BUNDLE","n":"Bard Outfit","i":"LBAGF"},{"c":"GLAM ROCKER BUNDLE","n":"Cosmic Mane","i":"LHAGD"},{"c":"GLAM ROCKER BUNDLE","n":"Rocker Jacket","i":"LBAGL"},{"c":"CLIMB STOPPERS BUNDLE","n":"Custodian Hat","i":"LHAGF"},{"c":"CLIMB STOPPERS BUNDLE","n":"Bobby Uniform","i":"LBAGU"},{"c":"SPLASH & DASH BUNDLE","n":"Swim Cap Goggles","i":"LFAEC"},{"c":"SPLASH & DASH BUNDLE","n":"Lifeguard Suit","i":"LBAHB"},{"c":"CYBER MONKE BUNDLE","n":"Cyber Ninja Star","i":"LMALH"},{"c":"CYBER MONKE BUNDLE","n":"Cyber Goggles","i":"LFAED"},{"c":"CYBER MONKE BUNDLE","n":"Cyber Suit","i":"LBAHE"},{"c":"PROMOTIONAL COSMETICS","n":"WitchBlood Tome","i":"LMAKT"},{"c":"PROMOTIONAL COSMETICS","n":"Responsive Raccoon","i":"LMALI"},{"c":"PROMOTIONAL COSMETICS","n":"Mini Bat Cap","i":"LHAGS"},{"c":"EVENT COSMETICS (WeAreVR 2023)","n":"VR Badge","i":"LBAEB"},{"c":"EVENT COSMETICS (WeAreVR 2023)","n":"VR Headset","i":"LFADE"},{"c":"SPECIAL / UNOBTAINABLE","n":"Administrator Badge","i":"LBAAD"},{"c":"SPECIAL / UNOBTAINABLE","n":"Mod Stick","i":"LBAAK"},{"c":"SPECIAL / UNOBTAINABLE","n":"Finger Painter Badge","i":"LBADE"},{"c":"SPECIAL / UNOBTAINABLE","n":"Illustrator Badge","i":"LBAGS"},{"c":"SPECIAL / UNOBTAINABLE","n":"GT Monke Plush","i":"LMAJA"},{"c":"SPECIAL / UNOBTAINABLE","n":"Forest Guide Stick","i":"LMAPY"},{"c":"SPECIAL / UNOBTAINABLE","n":"Another Axiom badge","i":"LBANI"}];
+var cosmeticData = [{"c":"EARLY ACCESS SUPPORTER DLC","n":"Early Access Badge","i":"LBAAE"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Chrome Cowboy Hat","i":"LHABB"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Sunny Sunhat","i":"LHABA"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Aviators","i":"LFAAN"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Banana Hat","i":"LHAAA"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Cloche","i":"LHAAM"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Coconut","i":"LHAAK"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Cowboy Hat","i":"LHAAN"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Fez","i":"LHAAO"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Sunhat","i":"LHAAL"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Tortoiseshell Sunglasses","i":"LFAAM"},{"c":"EARLY ACCESS SUPPORTER DLC","n":"Top Hat","i":"LHAAP"},{"c":"CITY COSMETICS","n":"Baseball Cap","i":"LHAAF"},{"c":"CITY COSMETICS","n":"Basic Beanie","i":"LHAAQ"},{"c":"CITY COSMETICS","n":"Cat Ears","i":"LHAAB"},{"c":"CITY COSMETICS","n":"Chefs Hat","i":"LHABC"},{"c":"CITY COSMETICS","n":"Flower Crown","i":"LHAAS"},{"c":"CITY COSMETICS","n":"Forehead Mirror","i":"LHAAH"},{"c":"CITY COSMETICS","n":"Golden Head","i":"LHAAG"},{"c":"CITY COSMETICS","n":"Headphones1","i":"LHABP"},{"c":"CITY COSMETICS","n":"Party Hat","i":"LHAAC"},{"c":"CITY COSMETICS","n":"Pineapple Hat","i":"LHAAI"},{"c":"CITY COSMETICS","n":"Sweatband","i":"LHAAE"},{"c":"CITY COSMETICS","n":"Monke Cap","i":"LHACY"},{"c":"CITY COSMETICS","n":"Gorilla Face Cap","i":"LHACZ"},{"c":"CITY COSMETICS","n":"Banana Logo Cap","i":"LHACV"},{"c":"CITY COSMETICS","n":"Ushanka","i":"LHAAD"},{"c":"CITY COSMETICS","n":"White Fedora","i":"LHAAR"},{"c":"CITY COSMETICS","n":"Witch Hat","i":"LHAAJ"},{"c":"CITY COSMETICS","n":"Basic Earrings","i":"LFAAC"},{"c":"CITY COSMETICS","n":"Basic Scarf","i":"LBAAC"},{"c":"CITY COSMETICS","n":"Big Eyebrows","i":"LFAAA"},{"c":"CITY COSMETICS","n":"Boxy Sunglasses","i":"LFABC"},{"c":"CITY COSMETICS","n":"Double Eyepatch","i":"LFAAJ"},{"c":"CITY COSMETICS","n":"Eyebrow Stud","i":"LFAAE"},{"c":"CITY COSMETICS","n":"Goggles","i":"LFAAK"},{"c":"CITY COSMETICS","n":"Left Eyepatch","i":"LFAAI"},{"c":"CITY COSMETICS","n":"Nose Ring","i":"LFAAB"},{"c":"CITY COSMETICS","n":"Right Eyepatch","i":"LFAAH"},{"c":"CITY COSMETICS","n":"Round Sunglasses","i":"LFAAO"},{"c":"CITY COSMETICS","n":"Skull Mask","i":"LFAAG"},{"c":"CITY COSMETICS","n":"Surgical Mask","i":"LFAAL"},{"c":"CITY COSMETICS","n":"Triangle Sunglasses","i":"LFAAF"},{"c":"CITY COSMETICS","n":"Bowtie","i":"LBAAB"},{"c":"CITY COSMETICS","n":"Canyon Pin","i":"LBAAG"},{"c":"CITY COSMETICS","n":"City Pin","i":"LBAAH"},{"c":"CITY COSMETICS","n":"Crystals Pin","i":"LBAAF"},{"c":"CITY COSMETICS","n":"Gorilla Pin","i":"LBAAI"},{"c":"CITY COSMETICS","n":"Mountain Pin","i":"LBABH"},{"c":"CITY COSMETICS","n":"Neck Scarf","i":"LBAAJ"},{"c":"CITY COSMETICS","n":"Tree Pin","i":"LBAAA"},{"c":"CITY COSMETICS","n":"Banana Logo Tee","i":"LBACA"},{"c":"CITY COSMETICS","n":"I Love GT Tee","i":"LBACD"},{"c":"CITY COSMETICS","n":"Gorilla Tag Flag","i":"LMABP"},{"c":"BALLOON COSMETICS","n":"Chocolate Donut Balloon","i":"LMAAS"},{"c":"BALLOON COSMETICS","n":"Pink Donut Balloon","i":"LMABD"},{"c":"HALLOWEEN (2021)","n":"Mummy Wrap","i":"LFAAQ"},{"c":"HALLOWEEN (2021)","n":"Paperbag Hat","i":"LHAAT"},{"c":"HALLOWEEN (2021)","n":"Pirate Bandana","i":"LHAAZ"},{"c":"HALLOWEEN (2021)","n":"Pumpkin Hat","i":"LHAAU"},{"c":"HALLOWEEN (2021)","n":"Witch Nose","i":"LFAAP"},{"c":"AUTUMN (2021)","n":"Face Scarf","i":"LFAAW"},{"c":"AUTUMN (2021)","n":"Maple Leaf","i":"LFAAV"},{"c":"AUTUMN (2021)","n":"Turkey Finger Puppet","i":"LBAAQ"},{"c":"AUTUMN (2021)","n":"Turkey Leg","i":"LBAAP"},{"c":"HOLIDAY (2021)","n":"2022 Glasses","i":"LFAAZ"},{"c":"HOLIDAY (2021)","n":"Candy Cane","i":"LBAAR"},{"c":"HOLIDAY (2021)","n":"Elf Hat","i":"LHABG"},{"c":"HOLIDAY (2021)","n":"Gift Hat","i":"LHABF"},{"c":"HOLIDAY (2021)","n":"Nose Snowflake","i":"LFABA"},{"c":"HOLIDAY (2021)","n":"Ornament Earrings","i":"LFAAY"},{"c":"HOLIDAY (2021)","n":"Snowman Hat","i":"LHABE"},{"c":"HOLIDAY (2021)","n":"Sparkler","i":"LBAAS"},{"c":"WINTER (2022)","n":"Black Earmuffs","i":"LHABM"},{"c":"WINTER (2022)","n":"Blue Pompom Hat","i":"LHABI"},{"c":"WINTER (2022)","n":"Green Earmuffs","i":"LHABN"},{"c":"WINTER (2022)","n":"Icicle","i":"LBAAT"},{"c":"WINTER (2022)","n":"Orange Pompom Hat","i":"LHABH"},{"c":"WINTER (2022)","n":"Pattern Pompom Hat","i":"LHABK"},{"c":"WINTER (2022)","n":"Pink Earmuffs","i":"LHABO"},{"c":"WINTER (2022)","n":"Rosy Cheeks","i":"LFABB"},{"c":"WINTER (2022)","n":"Stripe Pompom Hat","i":"LHABJ"},{"c":"WINTER (2022)","n":"White Earmuffs","i":"LHABL"},{"c":"VALENTINES (2022)","n":"Black Rose","i":"LBAAX"},{"c":"VALENTINES (2022)","n":"Box Of Chocolates Hat","i":"LHABQ"},{"c":"VALENTINES (2022)","n":"Chest Heart","i":"LBAAU"},{"c":"VALENTINES (2022)","n":"Golden Rose","i":"LBAAY"},{"c":"VALENTINES (2022)","n":"Heart Glasses","i":"LFABD"},{"c":"VALENTINES (2022)","n":"Heart Pompom Hat","i":"LHABR"},{"c":"VALENTINES (2022)","n":"Pink Rose","i":"LBAAW"},{"c":"VALENTINES (2022)","n":"Red Rose","i":"LBAAV"},{"c":"1ST ANNIVERSARY (2022)","n":"GT1 Badge","i":"LBAAZ"},{"c":"1ST ANNIVERSARY (2022)","n":"Thumb Party Hats","i":"LBABA"},{"c":"HOUSEHOLD (2022)","n":"Cookie Jar","i":"LFABE"},{"c":"HOUSEHOLD (2022)","n":"Golden Utensils","i":"LBABE"},{"c":"HOUSEHOLD (2022)","n":"Golden Wrench","i":"LBABC"},{"c":"HOUSEHOLD (2022)","n":"Plunger","i":"LHABS"},{"c":"HOUSEHOLD (2022)","n":"Regular Utensils","i":"LBABD"},{"c":"HOUSEHOLD (2022)","n":"Regular Wrench","i":"LBABB"},{"c":"HOUSEHOLD (2022)","n":"Saucepan","i":"LHABT"},{"c":"SPRING (2022)","n":"Bite Onion","i":"LFABF"},{"c":"SPRING (2022)","n":"Blue Lily Hat","i":"LHABX"},{"c":"SPRING (2022)","n":"Brown Bunny Ears","i":"LHABV"},{"c":"SPRING (2022)","n":"Cherry Blossom Branch","i":"LMAAA"},{"c":"SPRING (2022)","n":"Emperor Nose Butterfly","i":"LFABG"},{"c":"SPRING (2022)","n":"Four Leaf Clover","i":"LBABF"},{"c":"SPRING (2022)","n":"Golden Four Leaf Clover","i":"LBABG"},{"c":"SPRING (2022)","n":"Leprechaun Hat","i":"LHABW"},{"c":"SPRING (2022)","n":"Purple Lily Hat","i":"LHABY"},{"c":"SPRING (2022)","n":"White Bunny Ears","i":"LHABU"},{"c":"RAINY (2022)","n":"Black Umbrella","i":"LMAAF"},{"c":"RAINY (2022)","n":"Cloud Hand Boots","i":"LMAAD"},{"c":"RAINY (2022)","n":"Colorful Umbrella","i":"LMAAG"},{"c":"RAINY (2022)","n":"Forehead Egg","i":"LFABH"},{"c":"RAINY (2022)","n":"Golden Hand Boots","i":"LMAAE"},{"c":"RAINY (2022)","n":"Golden Umbrella","i":"LMAAH"},{"c":"RAINY (2022)","n":"Painted Egg Hat","i":"LHACA"},{"c":"RAINY (2022)","n":"Pocket Gorilla Bun Blue","i":"LBABK"},{"c":"RAINY (2022)","n":"Pocket Gorilla Bun Pink","i":"LBABL"},{"c":"RAINY (2022)","n":"Pocket Gorilla Bun Yellow","i":"LBABJ"},{"c":"RAINY (2022)","n":"Yellow Hand Boots","i":"LMAAC"},{"c":"RAINY (2022)","n":"Yellow Rain Hat","i":"LHABZ"},{"c":"RAINY (2022)","n":"Yellow Rain Shawl","i":"LBABI"},{"c":"MUSIC (2022)","n":"Acoustic Guitar","i":"LMAAI"},{"c":"MUSIC (2022)","n":"Black Longhair Wig","i":"LHACB"},{"c":"MUSIC (2022)","n":"Bongos","i":"LBABM"},{"c":"MUSIC (2022)","n":"Drum Set","i":"LBABN"},{"c":"MUSIC (2022)","n":"Electric Guitar","i":"LMAAK"},{"c":"MUSIC (2022)","n":"Electro Helm","i":"LHACD"},{"c":"MUSIC (2022)","n":"Golden Acoustic Guitar","i":"LMAAJ"},{"c":"MUSIC (2022)","n":"Golden Electric Guitar","i":"LMAAL"},{"c":"MUSIC (2022)","n":"Lightning Makeup","i":"LFABI"},{"c":"MUSIC (2022)","n":"Red Longhair Wig","i":"LHACC"},{"c":"SUMMER (2022)","n":"Black Shutter Shades","i":"LFABK"},{"c":"SUMMER (2022)","n":"Blue Shutter Shades","i":"LFABJ"},{"c":"SUMMER (2022)","n":"Bubbler","i":"LMAAM"},{"c":"SUMMER (2022)","n":"Flamingo Floatie","i":"LBABP"},{"c":"SUMMER (2022)","n":"Green Shutter Shades","i":"LFABL"},{"c":"SUMMER (2022)","n":"Popsicle","i":"LMAAN"},{"c":"SUMMER (2022)","n":"Red Shutter Shades","i":"LFABM"},{"c":"SUMMER (2022)","n":"Rubber Duckie","i":"LMAAO"},{"c":"SUMMER (2022)","n":"Seagull","i":"LHACE"},{"c":"SUMMER (2022)","n":"Spilled Ice Cream","i":"LBABO"},{"c":"SUMMER (2022)","n":"Sunburn","i":"LFABN"},{"c":"SUMMER (2022)","n":"Sunscreen","i":"LFABO"},{"c":"PAINTBRAWL (2022)","n":"Paintball Forest Vest","i":"LBABR"},{"c":"PAINTBRAWL (2022)","n":"Paintball Forest Visor","i":"LFABP"},{"c":"PAINTBRAWL (2022)","n":"Paintball Gorilla Armor","i":"LBABT"},{"c":"PAINTBRAWL (2022)","n":"Paintball Snow Vest","i":"LBABQ"},{"c":"PAINTBRAWL (2022)","n":"Paintball Snow Visor","i":"LFABQ"},{"c":"HALLOWEEN (2022)","n":"Bulging Googly Eyes","i":"LFABS"},{"c":"HALLOWEEN (2022)","n":"Candy Bar Fun Size","i":"LMAAZ"},{"c":"HALLOWEEN (2022)","n":"Deadshot","i":"LMABB"},{"c":"HALLOWEEN (2022)","n":"Ghost Balloon","i":"LMAAX"},{"c":"HALLOWEEN (2022)","n":"Giant Candy Bar","i":"LMAAY"},{"c":"HALLOWEEN (2022)","n":"Pumpkin Head Happy","i":"LHACJ"},{"c":"HALLOWEEN (2022)","n":"Pumpkin Head Scary","i":"LHACK"},{"c":"HALLOWEEN (2022)","n":"Slinky Eyes","i":"LFABV"},{"c":"HALLOWEEN (2022)","n":"Spider Web Umbrella","i":"LMABA"},{"c":"HALLOWEEN (2022)","n":"Unicorn Staff","i":"LMAAW"},{"c":"HALLOWEEN (2022)","n":"Yorick","i":"LMABC"},{"c":"FALL (2022)","n":"Balloon Turkey","i":"LMABH"},{"c":"FALL (2022)","n":"Candy Apple","i":"LMABI"},{"c":"FALL (2022)","n":"Caramel Apple","i":"LMABJ"},{"c":"FALL (2022)","n":"Corn on the Cob","i":"LMABN"},{"c":"FALL (2022)","n":"Cranberry Can","i":"LMABF"},{"c":"FALL (2022)","n":"Finger Olives","i":"LMABO"},{"c":"FALL (2022)","n":"Frying Pan","i":"LMABG"},{"c":"FALL (2022)","n":"Ladle","i":"LMABL"},{"c":"FALL (2022)","n":"Mouth Wheat","i":"LFABW"},{"c":"FALL (2022)","n":"Pie Hat","i":"LHACP"},{"c":"FALL (2022)","n":"Pie Slice","i":"LMABK"},{"c":"FALL (2022)","n":"Scarecrow Hat","i":"LHACQ"},{"c":"FALL (2022)","n":"Turkey Leg 22","i":"LMABM"},{"c":"FALL (2022)","n":"Turkey Toy","i":"LMABE"},{"c":"LAUNCH (2022)","n":"Angel Wings","i":"LHACX"},{"c":"LAUNCH (2022)","n":"Become Monke Rings","i":"LMACA"},{"c":"LAUNCH (2022)","n":"Big Head","i":"LHACW"},{"c":"LAUNCH (2022)","n":"Cloud Hat","i":"LHACR"},{"c":"LAUNCH (2022)","n":"Cloud Slingshot","i":"LMABV"},{"c":"LAUNCH (2022)","n":"Cloud Tee","i":"LBACG"},{"c":"LAUNCH (2022)","n":"Cloud Umbrella","i":"LMABX"},{"c":"LAUNCH (2022)","n":"Explorer Set","i":"LSAAN"},{"c":"LAUNCH (2022)","n":"Gorilla Balloon","i":"LMABW"},{"c":"LAUNCH (2022)","n":"Gorilla Diamond Rings","i":"LMABY"},{"c":"LAUNCH (2022)","n":"Happy Sad Flag","i":"LMABQ"},{"c":"LAUNCH (2022)","n":"Party Horn","i":"LMABS"},{"c":"LAUNCH (2022)","n":"Pinwheel","i":"LMABU"},{"c":"LAUNCH (2022)","n":"Stump Head","i":"LHACS"},{"c":"LAUNCH (2022)","n":"Toy Frog","i":"LMABT"},{"c":"LAUNCH (2022)","n":"Tux Tee","i":"LBACE"},{"c":"HOLIDAY (2022)","n":"2023 Glasses","i":"LFABX"},{"c":"HOLIDAY (2022)","n":"Christmas Umbrella 22","i":"LMACJ"},{"c":"HOLIDAY (2022)","n":"Evil Santa Set","i":"LSAAR"},{"c":"HOLIDAY (2022)","n":"Giant Candy Cane","i":"LMACL"},{"c":"HOLIDAY (2022)","n":"Gingerbread Man","i":"LMACB"},{"c":"HOLIDAY (2022)","n":"Holiday Pudding","i":"LMACC"},{"c":"HOLIDAY (2022)","n":"Mittens","i":"LMACK"},{"c":"HOLIDAY (2022)","n":"Reindeer Antlers","i":"LHADD"},{"c":"HOLIDAY (2022)","n":"Rudolph Nose","i":"LFABY"},{"c":"HOLIDAY (2022)","n":"Santa Set 22","i":"LSAAP"},{"c":"HOLIDAY (2022)","n":"Snowflake and Deer Rings","i":"LMACH"},{"c":"HOLIDAY (2022)","n":"Snowman Set","i":"LSAAQ"},{"c":"HOLIDAY (2022)","n":"Snowman Top Hat","i":"LHADH"},{"c":"HOLIDAY (2022)","n":"Stocking Hat","i":"LHADG"},{"c":"HOLIDAY (2022)","n":"Toy Gorilla Elf","i":"LMACI"},{"c":"HOLIDAY (2022)","n":"Tree and Snowman Rings","i":"LMACG"},{"c":"JANUARY WINTER (2023)","n":"Big Ear Muffs","i":"LFACB"},{"c":"JANUARY WINTER (2023)","n":"Cocoa Mug","i":"LMACP"},{"c":"JANUARY WINTER (2023)","n":"Eggplant Mittens","i":"LMACO"},{"c":"JANUARY WINTER (2023)","n":"Eggplant Sweater","i":"LBACO"},{"c":"JANUARY WINTER (2023)","n":"Face Scarf 23","i":"LFACC"},{"c":"JANUARY WINTER (2023)","n":"Frostburn Mittens","i":"LMACN"},{"c":"JANUARY WINTER (2023)","n":"Frostburn Sweater","i":"LBACN"},{"c":"JANUARY WINTER (2023)","n":"Full Head Beanie","i":"LHADI"},{"c":"JANUARY WINTER (2023)","n":"Ice Cube Head","i":"LHADJ"},{"c":"JANUARY WINTER (2023)","n":"Puffy Ski Jacket","i":"LBACL"},{"c":"JANUARY WINTER (2023)","n":"Ski Goggles","i":"LFACD"},{"c":"JANUARY WINTER (2023)","n":"Snow Owl Mask","i":"LHADK"},{"c":"JANUARY WINTER (2023)","n":"Snow Shovel","i":"LMACR"},{"c":"JANUARY WINTER (2023)","n":"Snowflake Mittens","i":"LMACM"},{"c":"JANUARY WINTER (2023)","n":"Snowflake Sweater","i":"LBACM"},{"c":"JANUARY WINTER (2023)","n":"Snowflake Wand","i":"LMACQ"},{"c":"JANUARY WINTER (2023)","n":"Squeezy Penguin","i":"LMACS"},{"c":"JANUARY WINTER (2023)","n":"Ushanka 23","i":"LHADL"},{"c":"2ND ANNIVERSARY (2023)","n":"GT2 Badge","i":"LBACQ"},{"c":"2ND ANNIVERSARY (2023)","n":"2nd Anniversary Cupcake","i":"LMACT"},{"c":"VALENTINES (2023)","n":"Heart Sweater","i":"LBACS"},{"c":"VALENTINES (2023)","n":"Hearts Headband","i":"LHADM"},{"c":"VALENTINES (2023)","n":"Mint Heart Candy Balloon","i":"LMACW"},{"c":"VALENTINES (2023)","n":"Pink Heart Candy Balloon","i":"LMACV"},{"c":"VALENTINES (2023)","n":"Teddy Bear","i":"LMACY"},{"c":"FEBRUARY WINTER (2023)","n":"Carrot Nose","i":"LFACE"},{"c":"FEBRUARY WINTER (2023)","n":"Champion Ring 23","i":"LMACZ"},{"c":"FEBRUARY WINTER (2023)","n":"Dog Toy","i":"LMADA"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Gloves A","i":"LMADF"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Helmet A","i":"LHADO"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Jersey A","i":"LBACV"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Stick A","i":"LMADJ"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Gloves B","i":"LMADG"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Helmet B","i":"LHADP"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Jersey B","i":"LBACW"},{"c":"FEBRUARY WINTER (2023)","n":"Hockey Stick B","i":"LMADK"},{"c":"FEBRUARY WINTER (2023)","n":"Hot Snack","i":"LMADB"},{"c":"FEBRUARY WINTER (2023)","n":"Ice Slingshot","i":"LMADC"},{"c":"FEBRUARY WINTER (2023)","n":"Moose Antlers","i":"LHADN"},{"c":"FEBRUARY WINTER (2023)","n":"Paw Badge","i":"LBACT"},{"c":"FEBRUARY WINTER (2023)","n":"Penguin Hat","i":"LHADQ"},{"c":"FEBRUARY WINTER (2023)","n":"Penguin Suit","i":"LBACU"},{"c":"FEBRUARY WINTER (2023)","n":"Polar Bear Set","i":"LSAAT"},{"c":"FEBRUARY WINTER (2023)","n":"Polar Teddy Bear","i":"LMADD"},{"c":"FEBRUARY WINTER (2023)","n":"Snow Blower","i":"LMADH"},{"c":"FEBRUARY WINTER (2023)","n":"Winter Umbrella 23","i":"LMADE"},{"c":"BASEMENT (2023)","n":"Barbarian Set","i":"LSAAX"},{"c":"BASEMENT (2023)","n":"Bard Lute","i":"LMADR"},{"c":"BASEMENT (2023)","n":"Dragon Balloon","i":"LMADN"},{"c":"BASEMENT (2023)","n":"Dwarven Beard","i":"LFACJ"},{"c":"BASEMENT (2023)","n":"Elf Ears","i":"LFACI"},{"c":"BASEMENT (2023)","n":"Elven Bow","i":"LMADU"},{"c":"BASEMENT (2023)","n":"King Badge","i":"LBADA"},{"c":"BASEMENT (2023)","n":"Knight Set","i":"LSAAW"},{"c":"BASEMENT (2023)","n":"Magic Ring","i":"LMADT"},{"c":"BASEMENT (2023)","n":"Orc Set","i":"LSAAY"},{"c":"BASEMENT (2023)","n":"Peasant Haircut","i":"LHADU"},{"c":"BASEMENT (2023)","n":"Squeezy Dragon","i":"LMADM"},{"c":"BASEMENT (2023)","n":"Wizard Set","i":"LSAAV"},{"c":"BASEMENT (2023)","n":"Wizard Staff","i":"LMADV"},{"c":"SPRING CLEANING (2023)","n":"Broom","i":"LMAEB"},{"c":"SPRING CLEANING (2023)","n":"Cheese Wedge","i":"LMAEC"},{"c":"SPRING CLEANING (2023)","n":"Daisy Badge","i":"LBADC"},{"c":"SPRING CLEANING (2023)","n":"Daisy Balloon","i":"LMADX"},{"c":"SPRING CLEANING (2023)","n":"Duster","i":"LMAEA"},{"c":"SPRING CLEANING (2023)","n":"Dustpan","i":"LMAEG"},{"c":"SPRING CLEANING (2023)","n":"Fly Head","i":"LHADY"},{"c":"SPRING CLEANING (2023)","n":"Green Rubber Gloves","i":"LMAEJ"},{"c":"SPRING CLEANING (2023)","n":"Hand Vacuum","i":"LMADY"},{"c":"SPRING CLEANING (2023)","n":"Kitchen Apron","i":"LBADD"},{"c":"SPRING CLEANING (2023)","n":"Mop Hat","i":"LHADW"},{"c":"SPRING CLEANING (2023)","n":"Mouse Mask","i":"LFACK"},{"c":"SPRING CLEANING (2023)","n":"Mouse Trap","i":"LMAEE"},{"c":"SPRING CLEANING (2023)","n":"Pot Lid","i":"LMAED"},{"c":"SPRING CLEANING (2023)","n":"Red Laundry Basket","i":"LHADZ"},{"c":"SPRING CLEANING (2023)","n":"Rolling Pin","i":"LMAEH"},{"c":"SPRING CLEANING (2023)","n":"Spatula","i":"LMADW"},{"c":"SPRING CLEANING (2023)","n":"Sponge","i":"LMAEF"},{"c":"SPRING CLEANING (2023)","n":"Squeezy Bumblebee","i":"LMADZ"},{"c":"SPRING CLEANING (2023)","n":"White Laundry Basket","i":"LHADX"},{"c":"SPRING CLEANING (2023)","n":"Yellow Rubber Gloves","i":"LMAEI"},{"c":"WILD WEST MAKEOVER (2023)","n":"Banjo","i":"LMAEK"},{"c":"WILD WEST MAKEOVER (2023)","n":"Horse Stick","i":"LMAEM"},{"c":"WILD WEST MAKEOVER (2023)","n":"Miner Hat","i":"LHAEA"},{"c":"WILD WEST MAKEOVER (2023)","n":"Outlaw Bandana","i":"LFACL"},{"c":"WILD WEST MAKEOVER (2023)","n":"Outlaw Hat","i":"LHAEB"},{"c":"WILD WEST MAKEOVER (2023)","n":"Pickaxe","i":"LMAEN"},{"c":"WILD WEST MAKEOVER (2023)","n":"Squeezy Coyote","i":"LMAEL"},{"c":"SUMMER SPLASH (2023)","n":"Arm Floaties","i":"LBADM"},{"c":"SUMMER SPLASH (2023)","n":"Beach Ball Umbrella","i":"LMAET"},{"c":"SUMMER SPLASH (2023)","n":"Beach Straw Hat","i":"LHAEE"},{"c":"SUMMER SPLASH (2023)","n":"Coconut Drink","i":"LMAEU"},{"c":"SUMMER SPLASH (2023)","n":"Ducky Floaty","i":"LBADI"},{"c":"SUMMER SPLASH (2023)","n":"Hawaiian Shirt","i":"LBADL"},{"c":"SUMMER SPLASH (2023)","n":"Hot Dog","i":"LMAEQ"},{"c":"SUMMER SPLASH (2023)","n":"Hula Outfit","i":"LBADH"},{"c":"SUMMER SPLASH (2023)","n":"Merfolk Set","i":"LSAAZ"},{"c":"SUMMER SPLASH (2023)","n":"Muscle Trunks","i":"LBADK"},{"c":"SUMMER SPLASH (2023)","n":"Octopus Hat","i":"LHAEC"},{"c":"SUMMER SPLASH (2023)","n":"Palm Tree Sunglasses","i":"LFACM"},{"c":"SUMMER SPLASH (2023)","n":"Shark Head","i":"LHAED"},{"c":"SUMMER SPLASH (2023)","n":"Smiling Sun Balloon","i":"LMAER"},{"c":"SUMMER SPLASH (2023)","n":"Squeezy Shark","i":"LMAEP"},{"c":"SUMMER SPLASH (2023)","n":"Waffle Cone Ice Cream","i":"LMAES"},{"c":"SUMMER CELEBRATION (2023)","n":"Bug Spray","i":"LMAFA"},{"c":"SUMMER CELEBRATION (2023)","n":"Camping Backpack","i":"LBADO"},{"c":"SUMMER CELEBRATION (2023)","n":"Cardboard Binoculars","i":"LMAFB"},{"c":"SUMMER CELEBRATION (2023)","n":"Chromatic Sunglasses","i":"LFACO"},{"c":"SUMMER CELEBRATION (2023)","n":"Compass","i":"LMAFC"},{"c":"SUMMER CELEBRATION (2023)","n":"Cool Guy Outfit","i":"LBADP"},{"c":"SUMMER CELEBRATION (2023)","n":"Gem Pop Ring","i":"LMAEZ"},{"c":"SUMMER CELEBRATION (2023)","n":"Marshmallow Skewer","i":"LMAFE"},{"c":"SUMMER CELEBRATION (2023)","n":"Milkshake","i":"LMAFF"},{"c":"SUMMER CELEBRATION (2023)","n":"Monke Candle","i":"LMAFG"},{"c":"SUMMER CELEBRATION (2023)","n":"Monke Ice Cream","i":"LMAFD"},{"c":"SUMMER CELEBRATION (2023)","n":"Mustache","i":"LFACP"},{"c":"SUMMER CELEBRATION (2023)","n":"Propeller Cap","i":"LHAEF"},{"c":"SUMMER CELEBRATION (2023)","n":"Safari Set","i":"LSABB"},{"c":"SUMMER CELEBRATION (2023)","n":"Sports Visor","i":"LHAEI"},{"c":"SUMMER CELEBRATION (2023)","n":"Squeezy Dolphin","i":"LMAFH"},{"c":"SUMMER CELEBRATION (2023)","n":"Stars Top Hat","i":"LHAEH"},{"c":"SUMMER CELEBRATION (2023)","n":"Suitcase","i":"LMAFI"},{"c":"SUMMER CELEBRATION (2023)","n":"Summer Hawaiian Shirt","i":"LBADQ"},{"c":"CRYSTAL CAVERNS (2023)","n":"Bat Balloon","i":"LMAFJ"},{"c":"CRYSTAL CAVERNS (2023)","n":"Bat Mask","i":"LFACQ"},{"c":"CRYSTAL CAVERNS (2023)","n":"Bat Wings","i":"LBADR"},{"c":"CRYSTAL CAVERNS (2023)","n":"Crystal Caves Badge","i":"LBADS"},{"c":"CRYSTAL CAVERNS (2023)","n":"Crystal Mohawk","i":"LHAEJ"},{"c":"CRYSTAL CAVERNS (2023)","n":"Crystal Necklace","i":"LBADT"},{"c":"CRYSTAL CAVERNS (2023)","n":"Crystal Ring","i":"LMAFK"},{"c":"CRYSTAL CAVERNS (2023)","n":"Crystal Umbrella","i":"LMAFL"},{"c":"CRYSTAL CAVERNS (2023)","n":"Crystal Whistle","i":"LMAFM"},{"c":"CRYSTAL CAVERNS (2023)","n":"Crystal Xylophone","i":"LBADU"},{"c":"CRYSTAL CAVERNS (2023)","n":"Dino Fossil Hat","i":"LHAEK"},{"c":"CRYSTAL CAVERNS (2023)","n":"Edible Mushroom","i":"LMAFP"},{"c":"CRYSTAL CAVERNS (2023)","n":"Flare","i":"LMAFQ"},{"c":"CRYSTAL CAVERNS (2023)","n":"Geode","i":"LMAFR"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes Blue","i":"LFACT"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes Green","i":"LFACU"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes Orange","i":"LFACV"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes Purple","i":"LFACW"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes Red","i":"LFACS"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes Teal","i":"LFACX"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes White","i":"LFACY"},{"c":"CRYSTAL CAVERNS (2023)","n":"Glowy Eyes Yellow","i":"LFACZ"},{"c":"CRYSTAL CAVERNS (2023)","n":"Hand Drill","i":"LMAFO"},{"c":"CRYSTAL CAVERNS (2023)","n":"Miner Goggles","i":"LFACR"},{"c":"CRYSTAL CAVERNS (2023)","n":"Mushroom Hat","i":"LHAEL"},{"c":"CRYSTAL CAVERNS (2023)","n":"Squeezy Eel","i":"LMAFS"},{"c":"BACK TO SCHOOL (2023)","n":"Apple","i":"LMAFT"},{"c":"BACK TO SCHOOL (2023)","n":"Backpack","i":"LMAGC"},{"c":"BACK TO SCHOOL (2023)","n":"Backwards Cap","i":"LHAEP"},{"c":"BACK TO SCHOOL (2023)","n":"Braces","i":"LFADB"},{"c":"BACK TO SCHOOL (2023)","n":"Canvas Shoes","i":"LMAFY"},{"c":"BACK TO SCHOOL (2023)","n":"Coach Whistle","i":"LMAFU"},{"c":"BACK TO SCHOOL (2023)","n":"Emo Hair","i":"LHAEO"},{"c":"BACK TO SCHOOL (2023)","n":"Emo Makeup","i":"LFADA"},{"c":"BACK TO SCHOOL (2023)","n":"Marching Band Drum","i":"LBADZ"},{"c":"BACK TO SCHOOL (2023)","n":"Marching Band Hat","i":"LHAEN"},{"c":"BACK TO SCHOOL (2023)","n":"Nerd Glasses","i":"LFADC"},{"c":"BACK TO SCHOOL (2023)","n":"Novelty Pencil","i":"LMAGA"},{"c":"BACK TO SCHOOL (2023)","n":"Pocket Protector Shirt","i":"LBADW"},{"c":"BACK TO SCHOOL (2023)","n":"School Bus Balloon","i":"LMAFV"},{"c":"BACK TO SCHOOL (2023)","n":"School Uniform","i":"LBADY"},{"c":"BACK TO SCHOOL (2023)","n":"Spiral Glasses","i":"LFADD"},{"c":"BACK TO SCHOOL (2023)","n":"Spitball Straw","i":"LMAFZ"},{"c":"BACK TO SCHOOL (2023)","n":"Troop Ring","i":"LMAFX"},{"c":"BACK TO SCHOOL (2023)","n":"Varsity Jacket","i":"LBADX"},{"c":"BACK TO SCHOOL (2023)","n":"Water Bottle","i":"LMAFW"},{"c":"FOREST LAVA (2023)","n":"Combusted Hair","i":"LHAER"},{"c":"FOREST LAVA (2023)","n":"Finger Torch","i":"LMAGH"},{"c":"FOREST LAVA (2023)","n":"Fire Fan","i":"LMAGI"},{"c":"FOREST LAVA (2023)","n":"Flaming Cap","i":"LHAEQ"},{"c":"FOREST LAVA (2023)","n":"Hot Hot Pepper","i":"LMAGG"},{"c":"FOREST LAVA (2023)","n":"Lava Badge","i":"LBAEA"},{"c":"FOREST LAVA (2023)","n":"Lava Conch Shell","i":"LMAGF"},{"c":"FOREST LAVA (2023)","n":"Lava Ring","i":"LMAGM"},{"c":"FOREST LAVA (2023)","n":"Magma Mug","i":"LMAGK"},{"c":"FOREST LAVA (2023)","n":"Magmabrella","i":"LMAGO"},{"c":"FOREST LAVA (2023)","n":"Molten Rock Slingshot","i":"LMAGJ"},{"c":"FOREST LAVA (2023)","n":"Singed Straw Hat","i":"LHAES"},{"c":"FOREST LAVA (2023)","n":"Singed Tee","i":"LBAEC"},{"c":"FOREST LAVA (2023)","n":"Squeezy Phoenix","i":"LMAGL"},{"c":"FOREST LAVA (2023)","n":"Volcanist Gloves","i":"LMAGP"},{"c":"FOREST LAVA (2023)","n":"Volcanist Hood","i":"LHAET"},{"c":"FOREST LAVA (2023)","n":"Volcanist Suit","i":"LBAEE"},{"c":"FOREST LAVA (2023)","n":"Volcano Hammer","i":"LMAGQ"},{"c":"FOREST LAVA (2023)","n":"Volcano Hat","i":"LHAEU"},{"c":"FOREST LAVA (2023)","n":"Volcano Tee","i":"LBAED"},{"c":"HALLOWEEN (2023)","n":"Cauldron Concoction","i":"LMAGW"},{"c":"HALLOWEEN (2023)","n":"Clown Mask","i":"LFADH"},{"c":"HALLOWEEN (2023)","n":"Devil Pitchfork","i":"LMAGY"},{"c":"HALLOWEEN (2023)","n":"Franken Flat Top","i":"LHAEX"},{"c":"HALLOWEEN (2023)","n":"Gold Skeleton Cap","i":"LHAEY"},{"c":"HALLOWEEN (2023)","n":"Gothic Dress","i":"LBAEH"},{"c":"HALLOWEEN (2023)","n":"Gummy Spider","i":"LMAGV"},{"c":"HALLOWEEN (2023)","n":"Mephistopheles Mask","i":"LFADG"},{"c":"HALLOWEEN (2023)","n":"Mummy Mitts","i":"LMAGU"},{"c":"HALLOWEEN (2023)","n":"Opera Masque","i":"LFADI"},{"c":"HALLOWEEN (2023)","n":"Poltergeist Pipes","i":"LBAEI"},{"c":"HALLOWEEN (2023)","n":"Salem Squeezy","i":"LMAGS"},{"c":"HALLOWEEN (2023)","n":"Skeleton Body","i":"LBAEG"},{"c":"HALLOWEEN (2023)","n":"Skeleton Cap","i":"LHAEW"},{"c":"HALLOWEEN (2023)","n":"Skull Guitar","i":"LMAGZ"},{"c":"HALLOWEEN (2023)","n":"Spooky Stories Ring","i":"LMAGX"},{"c":"HALLOWEEN (2023)","n":"Sweet Tooth","i":"LFADF"},{"c":"FALL (2023)","n":"Pumpkin Pie Hat","i":"LHAEZ"},{"c":"FALL (2023)","n":"Bonnet","i":"LHAFA"},{"c":"FALL (2023)","n":"Pilgrim Hat","i":"LHAFB"},{"c":"FALL (2023)","n":"Big Turkey Hat","i":"LHAFC"},{"c":"FALL (2023)","n":"Big Turkey Suit","i":"LBAEJ"},{"c":"FALL (2023)","n":"Cooked Dinner Suit","i":"LBAEK"},{"c":"FALL (2023)","n":"Turkey Face Tee","i":"LBAEL"},{"c":"FALL (2023)","n":"Turkey Dinner Tee","i":"LBAEM"},{"c":"FALL (2023)","n":"Autumn Scarf","i":"LBAEN"},{"c":"FALL (2023)","n":"Apple Pie Slice","i":"LMAHA"},{"c":"FALL (2023)","n":"Squeezy Squirrel","i":"LMAHB"},{"c":"FALL (2023)","n":"Gravy Boat","i":"LMAHD"},{"c":"FALL (2023)","n":"Maple Leaf Balloon","i":"LMAHE"},{"c":"HOLIDAY (2023)","n":"2024 Glasses","i":"LFADK"},{"c":"HOLIDAY (2023)","n":"Dreidel","i":"LMAHG"},{"c":"HOLIDAY (2023)","n":"Hand Bell","i":"LMAHI"},{"c":"HOLIDAY (2023)","n":"Ice Staff","i":"LMAHK"},{"c":"HOLIDAY (2023)","n":"Monke Cracker Toy","i":"LMAHO"},{"c":"HOLIDAY (2023)","n":"Owl Nest Hat","i":"LHAFD"},{"c":"HOLIDAY (2023)","n":"Snow Globe","i":"LMAHM"},{"c":"HOLIDAY (2023)","n":"Stuffed Monke","i":"LMAHN"},{"c":"HOLIDAY (2023)","n":"Tree Cookie","i":"LMAHP"},{"c":"HOLIDAY (2023)","n":"Train Engineer Hat","i":"LHAFE"},{"c":"HOLIDAY (2023)","n":"Gold Gift Hat","i":"LHAFF"},{"c":"HOLIDAY (2023)","n":"Hollyday Glasses","i":"LFADJ"},{"c":"HOLIDAY (2023)","n":"Ugly Sweater 23","i":"LBAEP"},{"c":"HOLIDAY (2023)","n":"Sleigh Tee","i":"LBAEQ"},{"c":"HOLIDAY (2023)","n":"Tangled Lights","i":"LBAER"},{"c":"HOLIDAY (2023)","n":"Wood Train Whistle","i":"LMAHS"},{"c":"HOLIDAY (2023)","n":"Snowflake Badge","i":"LBAEO"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Lightning Rod","i":"LMAHT"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Stopwatch","i":"LMAHV"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Tuning Fork","i":"LMAHW"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Magnifying Glass","i":"LMAHX"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Paper Airplane","i":"LMAHY"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Horseshoe Magnet","i":"LMAIA"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Tin Foil","i":"LHAFH"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Tesla Coil Hat","i":"LHAFI"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Respirator","i":"LFADL"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Safety Goggles","i":"LFADM"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Atomic Badge","i":"LBAET"},{"c":"SCIENCE EXPERIMENT (2024)","n":"Monkeodic Table Tee","i":"LBAEV"},{"c":"SCIENCE EXPERIMENT (2024)","n":"X-Ray Board","i":"LBAEW"},{"c":"3RD ANNIVERSARY (2024)","n":"GT3 Anniversary Badge","i":"LBAFN"},{"c":"3RD ANNIVERSARY (2024)","n":"3rd Anniversary Cake","i":"LMAIL"},{"c":"I LAVA YOU (2024)","n":"Queen Tiara","i":"LHAFL"},{"c":"I LAVA YOU (2024)","n":"King Crown","i":"LHAFM"},{"c":"I LAVA YOU (2024)","n":"Firefighter Hat","i":"LHAFN"},{"c":"I LAVA YOU (2024)","n":"Flame Hair","i":"LHAFO"},{"c":"I LAVA YOU (2024)","n":"Cupid Arrow Headband","i":"LHAFP"},{"c":"I LAVA YOU (2024)","n":"Candy Lips","i":"LFADN"},{"c":"I LAVA YOU (2024)","n":"Doe Eyes","i":"LFADO"},{"c":"I LAVA YOU (2024)","n":"Queen of Hearts Garb","i":"LBAFJ"},{"c":"I LAVA YOU (2024)","n":"King of Hearts Garb","i":"LBAFK"},{"c":"I LAVA YOU (2024)","n":"Flaming Heart Badge","i":"LBAFL"},{"c":"I LAVA YOU (2024)","n":"Be-Monke Board","i":"LBAFM"},{"c":"I LAVA YOU (2024)","n":"Squeezy Heart","i":"LMAIJ"},{"c":"I LAVA YOU (2024)","n":"Flaming Heart Staff","i":"LMAIK"},{"c":"I LAVA YOU (2024)","n":"Candy Bracelet","i":"LMAIM"},{"c":"I LAVA YOU (2024)","n":"Chocolate Pepper","i":"LMAIN"},{"c":"THIS IS FIRE (2024)","n":"Flame Thrower","i":"LMAII"},{"c":"THIS IS FIRE (2024)","n":"Fire Extinguisher","i":"LMAIH"},{"c":"NOWRUZ (2024)","n":"Bee Antennae","i":"LHAFR"},{"c":"NOWRUZ (2024)","n":"Rain Cloud","i":"LHAFS"},{"c":"NOWRUZ (2024)","n":"Wheatgrass","i":"LHAFT"},{"c":"NOWRUZ (2024)","n":"Fish Bowl","i":"LHAFU"},{"c":"NOWRUZ (2024)","n":"Tiger Ears","i":"LHAFV"},{"c":"NOWRUZ (2024)","n":"Fabric Earrings","i":"LFADP"},{"c":"NOWRUZ (2024)","n":"Bee Nose","i":"LFADQ"},{"c":"NOWRUZ (2024)","n":"Bee Wings","i":"LBAFT"},{"c":"NOWRUZ (2024)","n":"Persian Skirt","i":"LBAFU"},{"c":"NOWRUZ (2024)","n":"Fish Badge","i":"LBAFV"},{"c":"NOWRUZ (2024)","n":"Tiger Tail","i":"LBAFW"},{"c":"NOWRUZ (2024)","n":"Tiger Fur","i":"LBAFX"},{"c":"NOWRUZ (2024)","n":"Spring Puppets","i":"LMAIR"},{"c":"NOWRUZ (2024)","n":"Persian Rug Umbrella","i":"LMAIS"},{"c":"NOWRUZ (2024)","n":"Gragger Toy","i":"LMAIT"},{"c":"NOWRUZ (2024)","n":"Chocolate Bunny","i":"LMAIU"},{"c":"NOWRUZ (2024)","n":"Watering Can","i":"LMAIV"},{"c":"NOWRUZ (2024)","n":"Bee Balloon","i":"LMAIX"},{"c":"HOPPING SPRING (2024)","n":"Ragdoll Bunny","i":"LMAIW"},{"c":"HOPPING SPRING (2024)","n":"Giant Yellow Bunny","i":"LMAIY"},{"c":"HOPPING SPRING (2024)","n":"Giant Pink Bunny","i":"LMAIZ"},{"c":"FLYING MONKES (2024)","n":"Cloud Pompadour","i":"LHAFX"},{"c":"FLYING MONKES (2024)","n":"Birdhouse Hat","i":"LHAFY"},{"c":"FLYING MONKES (2024)","n":"Flying Ace Cap","i":"LHAFZ"},{"c":"FLYING MONKES (2024)","n":"Bird Beak","i":"LFADR"},{"c":"FLYING MONKES (2024)","n":"Flying Ace Stache","i":"LFADS"},{"c":"FLYING MONKES (2024)","n":"Gold Aviators","i":"LFADT"},{"c":"FLYING MONKES (2024)","n":"Aviator Goggles","i":"LFADU"},{"c":"FLYING MONKES (2024)","n":"Bird Fur","i":"LBAFZ"},{"c":"FLYING MONKES (2024)","n":"Trail Smoker","i":"LBAGA"},{"c":"FLYING MONKES (2024)","n":"Flying Ace Jacket","i":"LBAGB"},{"c":"FLYING MONKES (2024)","n":"Long Scarf","i":"LBAGC"},{"c":"FLYING MONKES (2024)","n":"Pilot Badge","i":"LBAGD"},{"c":"FLYING MONKES (2024)","n":"Storming Umbrella","i":"LMAJC"},{"c":"FLYING MONKES (2024)","n":"Checkered Flag","i":"LMAJE"},{"c":"FLYING MONKES (2024)","n":"Painted Flames Flag","i":"LMAJF"},{"c":"FLYING MONKES (2024)","n":"Leaf Shuriken Olive","i":"LMAJH"},{"c":"FLYING MONKES (2024)","n":"Leaf Shuriken Tawny","i":"LMAJI"},{"c":"DUNGEON MAZE (2024)","n":"Horn Cap","i":"LHAGA"},{"c":"DUNGEON MAZE (2024)","n":"Samurai Helm","i":"LHAGC"},{"c":"DUNGEON MAZE (2024)","n":"Dragon Visage","i":"LFADV"},{"c":"DUNGEON MAZE (2024)","n":"Oni Mask","i":"LFADW"},{"c":"DUNGEON MAZE (2024)","n":"D20 Badge","i":"LBAGE"},{"c":"DUNGEON MAZE (2024)","n":"Dragon Scales","i":"LBAGG"},{"c":"DUNGEON MAZE (2024)","n":"Fairy Wings","i":"LBAGH"},{"c":"DUNGEON MAZE (2024)","n":"Samurai Armor","i":"LBAGI"},{"c":"DUNGEON MAZE (2024)","n":"Dragon Wings","i":"LBAGK"},{"c":"DUNGEON MAZE (2024)","n":"Monke Hand Banner","i":"LMAJJ"},{"c":"DUNGEON MAZE (2024)","n":"Classic D6","i":"LMAJK"},{"c":"DUNGEON MAZE (2024)","n":"Classic D20","i":"LMADQ"},{"c":"DUNGEON MAZE (2024)","n":"Cosmic D6","i":"LMAJL"},{"c":"DUNGEON MAZE (2024)","n":"Cosmic D20","i":"LMAJN"},{"c":"DUNGEON MAZE (2024)","n":"Dragon Claws","i":"LMAJO"},{"c":"DUNGEON MAZE (2024)","n":"Dragon Slingshot","i":"LMAJP"},{"c":"DUNGEON MAZE (2024)","n":"Yumi Bow","i":"LMAJQ"},{"c":"MEDIEVAL MELODIES (2024)","n":"Fireball","i":"LMAJM"},{"c":"PRIDE JAM (2024)","n":"Rainbow Mohawk","i":"LHAGE"},{"c":"PRIDE JAM (2024)","n":"Rainbow Facepaint","i":"LFADX"},{"c":"PRIDE JAM (2024)","n":"Purple Heart Glasses","i":"LFADY"},{"c":"PRIDE JAM (2024)","n":"Rainbow Cape","i":"LBAGM"},{"c":"PRIDE JAM (2024)","n":"He Badge","i":"LBAGN"},{"c":"PRIDE JAM (2024)","n":"She Badge","i":"LBAGO"},{"c":"PRIDE JAM (2024)","n":"They Badge","i":"LBAGP"},{"c":"PRIDE JAM (2024)","n":"Allygator Tee","i":"LBAGQ"},{"c":"PRIDE JAM (2024)","n":"Zebra Fur","i":"LBAGR"},{"c":"PRIDE JAM (2024)","n":"Rainbow Claws","i":"LMAJR"},{"c":"PRIDE JAM (2024)","n":"Pride Flag","i":"LMAJS"},{"c":"PRIDE JAM (2024)","n":"Trans Pride Flag","i":"LMAJT"},{"c":"PRIDE JAM (2024)","n":"Glitter Gun","i":"LMAJU"},{"c":"PRIDE JAM (2024)","n":"Keytar","i":"LMAJV"},{"c":"PRIDE JAM (2024)","n":"Lion Plushy","i":"LMAJW"},{"c":"PRIDE JAM (2024)","n":"Rainbow Lion Plushy","i":"LMAJX"},{"c":"PRIDE JAM (2024)","n":"Pride Rock Ring","i":"LMAJY"},{"c":"WET N' WILD WEST (2024)","n":"Rainbow Umbrella","i":"LMAJZ"},{"c":"WET N' WILD WEST (2024)","n":"Waves Umbrella","i":"LMAKB"},{"c":"WET N' WILD WEST (2024)","n":"Fiery Umbrella","i":"LMAKA"},{"c":"METRO (2024)","n":"Pizza The Hat","i":"LHAGH"},{"c":"METRO (2024)","n":"Cream Cheese Bagel","i":"LMAKD"},{"c":"METRO (2024)","n":"Liberty Robes","i":"LBAGW"},{"c":"METRO (2024)","n":"Liberty Torch","i":"LMAKI"},{"c":"METRO (2024)","n":"Liberty Tiara","i":"LHAGJ"},{"c":"METRO (2024)","n":"Monocle","i":"LFADZ"},{"c":"METRO (2024)","n":"Shield Badge","i":"LBAGT"},{"c":"METRO (2024)","n":"Robber Cap","i":"LHAGI"},{"c":"METRO (2024)","n":"Robber Mask","i":"LFAEA"},{"c":"METRO (2024)","n":"Robber Suit","i":"LBAGV"},{"c":"METRO (2024)","n":"Dumbbell","i":"LMAKF"},{"c":"METRO (2024)","n":"Angryrilla","i":"LHAGG"},{"c":"METRO (2024)","n":"Gorilla Grips","i":"LMAKG"},{"c":"METRO (2024)","n":"Gorilla Fur","i":"LBAGX"},{"c":"METRO (2024)","n":"RC Blimp","i":"LMAKJ"},{"c":"METRO (2024)","n":"Monke Candle Purple","i":"LMAKK"},{"c":"METRO (2024)","n":"Monke Candle Green","i":"LMAKL"},{"c":"METRO (2024)","n":"RWB Sparkler","i":"LMAKM"},{"c":"METRO (2024)","n":"Red Sparkler","i":"LMAKN"},{"c":"METRO (2024)","n":"White Sparkler","i":"LMAKO"},{"c":"METRO (2024)","n":"Blue Sparkler","i":"LMAKP"},{"c":"METRO (2024)","n":"Pretzel Balloon","i":"LMAKE"},{"c":"CAN'T SEA ME (2024)","n":"Clamshell Hat","i":"LHAGK"},{"c":"CAN'T SEA ME (2024)","n":"Hammerhead Hat","i":"LHAGL"},{"c":"CAN'T SEA ME (2024)","n":"Hibiscus Hair","i":"LHAGM"},{"c":"CAN'T SEA ME (2024)","n":"Pufferfish Hat","i":"LHAGO"},{"c":"CAN'T SEA ME (2024)","n":"Pinchy Crab","i":"LFAEB"},{"c":"CAN'T SEA ME (2024)","n":"Shark Badge","i":"LBAGY"},{"c":"CAN'T SEA ME (2024)","n":"Leopard Shark Fur","i":"LBAGZ"},{"c":"CAN'T SEA ME (2024)","n":"Muscle Suit","i":"LBAHA"},{"c":"CAN'T SEA ME (2024)","n":"Pineapple Hawaiian Shirt","i":"LBAHC"},{"c":"CAN'T SEA ME (2024)","n":"Pink Hawaiian Shirt","i":"LBAHD"},{"c":"CAN'T SEA ME (2024)","n":"Conch Shell","i":"LMAKQ"},{"c":"CAN'T SEA ME (2024)","n":"Lifeguard Floaty","i":"LMAKR"},{"c":"CAN'T SEA ME (2024)","n":"Orca Balloon","i":"LMAKS"},{"c":"CAN'T SEA ME (2024)","n":"Fishy Fingies","i":"LMAKU"},{"c":"CAN'T SEA ME (2024)","n":"RC Shark Plane","i":"LMAKW"},{"c":"FUNKY FOSSILS (2024)","n":"Pelican","i":"LHAGN"},{"c":"NEON ROCKET (2024)","n":"Player 1 Badge","i":"LBAHG"},{"c":"NEON ROCKET (2024)","n":"Player 2 Badge","i":"LBAHH"},{"c":"NEON ROCKET (2024)","n":"3D Glasses","i":"LFAEG"},{"c":"NEON ROCKET (2024)","n":"Arcade Badge","i":"LBAHF"},{"c":"NEON ROCKET (2024)","n":"Arcade Carpet Tee","i":"LBAHK"},{"c":"NEON ROCKET (2024)","n":"Blue Wam Tee","i":"LBAHM"},{"c":"NEON ROCKET (2024)","n":"Can O Spinach Squeezy","i":"LMALD"},{"c":"NEON ROCKET (2024)","n":"Dino Feet","i":"LMALC"},{"c":"NEON ROCKET (2024)","n":"Game Over Tee","i":"LBAHL"},{"c":"NEON ROCKET (2024)","n":"Lightshow Toy","i":"LMAKX"},{"c":"NEON ROCKET (2024)","n":"Milk Carton","i":"LMAKZ"},{"c":"NEON ROCKET (2024)","n":"Chocolate Milk Carton","i":"LMALA"},{"c":"NEON ROCKET (2024)","n":"Strawberry Milk Carton","i":"LMALB"},{"c":"NEON ROCKET (2024)","n":"Monkefingers","i":"LMAKY"},{"c":"NEON ROCKET (2024)","n":"Orange Wam Tee","i":"LBAHN"},{"c":"NEON ROCKET (2024)","n":"Planet Hat","i":"LHAGP"},{"c":"NEON ROCKET (2024)","n":"Rubberband Ball","i":"LHAGQ"},{"c":"NEON ROCKET (2024)","n":"Salsa Dance Shirt","i":"LBAHI"},{"c":"NEON ROCKET (2024)","n":"Salsa Dance Skirt","i":"LBAHJ"},{"c":"NEON ROCKET (2024)","n":"Whack A Monke Squeezy","i":"LMALG"},{"c":"NEON ROCKET (2024)","n":"Wobbly Dino Hat","i":"LHAGR"},{"c":"NEON ROCKET (2024)","n":"Bass Guitar","i":"LMALF"},{"c":"NEON ROCKET (2024)","n":"Flying V Guitar","i":"LMALE"},{"c":"NEON ROCKET (2024)","n":"Rose In Mouth","i":"LFAEF"},{"c":"EARNED COSMETICS","n":"Monkeye Badge","i":"LBADB"},{"c":"EARNED COSMETICS","n":"Squeezy Monkeye","i":"LMADS"},{"c":"EARNED COSMETICS","n":"Soda Drip Tee","i":"LBAEX"},{"c":"EARNED COSMETICS","n":"Monkeye Tee","i":"LBAGJ"},{"c":"DAILY TEE","n":"Button Down Tropical","i":"LBAEY"},{"c":"DAILY TEE","n":"Cherry Tee","i":"LBAEZ"},{"c":"DAILY TEE","n":"Denim Vest Blue","i":"LBAFA"},{"c":"DAILY TEE","n":"Doug Tee","i":"LBAFB"},{"c":"DAILY TEE","n":"Marty Vest","i":"LBAFC"},{"c":"DAILY TEE","n":"Matt Blue Tee","i":"LBAFD"},{"c":"DAILY TEE","n":"Orange Tee","i":"LBAFE"},{"c":"DAILY TEE","n":"Pineapple Tee","i":"LBAFF"},{"c":"DAILY TEE","n":"Planet Group Tee","i":"LBAFG"},{"c":"DAILY TEE","n":"Ring Planet Tee","i":"LBAFH"},{"c":"DAILY TEE","n":"Rocket Tee","i":"LBAFO"},{"c":"DAILY TEE","n":"Strawberry Tee","i":"LBAFP"},{"c":"DAILY TEE","n":"Watermelon Tee","i":"LBAFQ"},{"c":"DAILY TEE","n":"Wolf Moon Tee","i":"LBAFR"},{"c":"LAUNCH BUNDLE","n":"Day 1 Cap","i":"LHADA"},{"c":"LAUNCH BUNDLE","n":"Launch Day Tee","i":"LBACF"},{"c":"SWEETHEART BUNDLE","n":"Cupid Outfit","i":"LBACR"},{"c":"SWEETHEART BUNDLE","n":"Cupid Bow","i":"LMACU"},{"c":"SWEETHEART BUNDLE","n":"Heart Ring","i":"LMACX"},{"c":"POT O' GOLD BUNDLE","n":"Pot O Gold","i":"LMADL"},{"c":"SUMMER SPLASH BUNDLE","n":"Scuba Goggles","i":"LFACN"},{"c":"SUMMER SPLASH BUNDLE","n":"Scuba Tank","i":"LBADJ"},{"c":"SUMMER SPLASH BUNDLE","n":"Dive Watch","i":"LMAEO"},{"c":"CRYSTAL CAVERN BUNDLE","n":"Hazard Hat","i":"LHAEM"},{"c":"CRYSTAL CAVERN BUNDLE","n":"Safety Vest","i":"LBADV"},{"c":"CRYSTAL CAVERN BUNDLE","n":"Monke Time Watch","i":"LMAFN"},{"c":"SPIDER MONKE BUNDLE","n":"Spider Abdomen","i":"LBAEF"},{"c":"SPIDER MONKE BUNDLE","n":"Spidey Slinger","i":"LMAGR"},{"c":"SPIDER MONKE BUNDLE","n":"Spider Cephalothorax","i":"LHAEV"},{"c":"HOLIDAY FIR BUNDLE","n":"Hand Saw","i":"LMAHJ"},{"c":"HOLIDAY FIR BUNDLE","n":"Fir Hat","i":"LHAFG"},{"c":"HOLIDAY FIR BUNDLE","n":"Fir Coat","i":"LBAES"},{"c":"MAD SCIENTIST BUNDLE","n":"Smart Brain","i":"LHAFJ"},{"c":"MAD SCIENTIST BUNDLE","n":"Lab Coat","i":"LBAEU"},{"c":"MAD SCIENTIST BUNDLE","n":"Toy Ray Gun","i":"LMAHU"},{"c":"I LAVA YOU BUNDLE","n":"Anteros Hat","i":"LHAFK"},{"c":"I LAVA YOU BUNDLE","n":"Anteros Cloth","i":"LBAFI"},{"c":"I LAVA YOU BUNDLE","n":"Anteros Bow","i":"LMAIG"},{"c":"BEEKEEPER BUNDLE","n":"Beekeeper Hat","i":"LHAFQ"},{"c":"BEEKEEPER BUNDLE","n":"Beekeeper Suit","i":"LBAFS"},{"c":"BEEKEEPER BUNDLE","n":"Beekeeper Smoker","i":"LMAIQ"},{"c":"LEAF NINJA BUNDLE","n":"Leaf Ninja Hood","i":"LHAFW"},{"c":"LEAF NINJA BUNDLE","n":"Leaf Wrappings","i":"LBAFY"},{"c":"LEAF NINJA BUNDLE","n":"Leaf Shuriken","i":"LMAJB"},{"c":"MONKE MONK BUNDLE","n":"Monk Haircut","i":"LHAGB"},{"c":"MONKE MONK BUNDLE","n":"Bard Outfit","i":"LBAGF"},{"c":"GLAM ROCKER BUNDLE","n":"Cosmic Mane","i":"LHAGD"},{"c":"GLAM ROCKER BUNDLE","n":"Rocker Jacket","i":"LBAGL"},{"c":"CLIMB STOPPERS BUNDLE","n":"Custodian Hat","i":"LHAGF"},{"c":"CLIMB STOPPERS BUNDLE","n":"Bobby Uniform","i":"LBAGU"},{"c":"SPLASH & DASH BUNDLE","n":"Swim Cap Goggles","i":"LFAEC"},{"c":"SPLASH & DASH BUNDLE","n":"Lifeguard Suit","i":"LBAHB"},{"c":"CYBER MONKE BUNDLE","n":"Cyber Ninja Star","i":"LMALH"},{"c":"CYBER MONKE BUNDLE","n":"Cyber Goggles","i":"LFAED"},{"c":"CYBER MONKE BUNDLE","n":"Cyber Suit","i":"LBAHE"},{"c":"PROMOTIONAL COSMETICS","n":"WitchBlood Tome","i":"LMAKT"},{"c":"PROMOTIONAL COSMETICS","n":"Responsive Raccoon","i":"LMALI"},{"c":"PROMOTIONAL COSMETICS","n":"Mini Bat Cap","i":"LHAGS"},{"c":"EVENT COSMETICS (WeAreVR 2023)","n":"VR Badge","i":"LBAEB"},{"c":"EVENT COSMETICS (WeAreVR 2023)","n":"VR Headset","i":"LFADE"},{"c":"SPECIAL / UNOBTAINABLE","n":"Administrator Badge","i":"LBAAD"},{"c":"SPECIAL / UNOBTAINABLE","n":"Mod Stick","i":"LBAAK"},{"c":"SPECIAL / UNOBTAINABLE","n":"Finger Painter Badge","i":"LBADE"},{"c":"SPECIAL / UNOBTAINABLE","n":"Illustrator Badge","i":"LBAGS"},{"c":"SPECIAL / UNOBTAINABLE","n":"GT Monke Plush","i":"LMAJA"},{"c":"SPECIAL / UNOBTAINABLE","n":"Forest Guide Stick","i":"LMAPY"},{"c":"SPECIAL / UNOBTAINABLE","n":"Another Axiom badge","i":"LBANI"}];
 
-  const grid = document.getElementById('grid');
-  const input = document.getElementById('searchInput');
-  const resultCount = document.getElementById('resultCount');
-  const totalLine = document.getElementById('totalLine');
+var grid = document.getElementById('grid');
+var searchBox = document.getElementById('searchInput');
+var countEl = document.getElementById('resultCount');
+var totalEl = document.getElementById('totalLine');
 
-  totalLine.textContent = `${DATA.length} cosmetics across ${new Set(DATA.map(d => d.c)).size} categories`;
+var catSet = {};
+for (var i = 0; i < cosmeticData.length; i++) catSet[cosmeticData[i].c] = true;
+var numCats = Object.keys(catSet).length;
+totalEl.textContent = cosmeticData.length + " cosmetics across " + numCats + " categories";
 
-  function escapeHtml(str){
-    return str.replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  }
+function esc(s){
+	return s.replace(/[&<>"']/g, function(ch){
+		if(ch=='&') return '&amp;';
+		if(ch=='<') return '&lt;';
+		if(ch=='>') return '&gt;';
+		if(ch=='"') return '&quot;';
+		return '&#39;';
+	});
+}
 
-  function highlight(text, query){
-    if(!query) return escapeHtml(text);
-    const idx = text.toLowerCase().indexOf(query.toLowerCase());
-    if(idx === -1) return escapeHtml(text);
-    return escapeHtml(text.slice(0, idx)) +
-           '<mark>' + escapeHtml(text.slice(idx, idx + query.length)) + '</mark>' +
-           escapeHtml(text.slice(idx + query.length));
-  }
+function hl(text, q){
+	if(!q) return esc(text);
+	var lower = text.toLowerCase();
+	var idx = lower.indexOf(q.toLowerCase());
+	if(idx === -1) return esc(text);
+	var before = text.slice(0, idx);
+	var match = text.slice(idx, idx + q.length);
+	var after = text.slice(idx + q.length);
+	return esc(before) + '<mark>' + esc(match) + '</mark>' + esc(after);
+}
 
-  function render(query){
-    const q = query.trim().toLowerCase();
-    const matches = q ? DATA.filter(d => d.n.toLowerCase().includes(q)) : DATA;
+function draw(query){
+	var q = query.trim().toLowerCase();
+	var matches = [];
 
-    resultCount.innerHTML = q ? `<b>${matches.length}</b> match${matches.length === 1 ? '' : 'es'}` : '';
+	if(!q){
+		matches = cosmeticData;
+	}else{
+		for(var i=0;i<cosmeticData.length;i++){
+			if(cosmeticData[i].n.toLowerCase().indexOf(q) !== -1){
+				matches.push(cosmeticData[i]);
+			}
+		}
+	}
 
-    if(matches.length === 0){
-      grid.innerHTML = `<div class="empty-state"><div class="big">🦍</div>No cosmetic named "${escapeHtml(query)}" found.</div>`;
-      return;
-    }
+	if(q){
+		countEl.innerHTML = '<b>' + matches.length + '</b> match' + (matches.length===1?'':'es');
+	}else{
+		countEl.innerHTML = '';
+	}
 
-    grid.innerHTML = matches.map(d => `
-      <div class="card">
-        <div class="eyebrow">${escapeHtml(d.c)}</div>
-        <div class="name">${highlight(d.n, q)}</div>
-        <div class="tag-row">
-          <span class="id-tag">${escapeHtml(d.i)}</span>
-          <button class="copy-btn" data-id="${escapeHtml(d.i)}" aria-label="Copy ID ${escapeHtml(d.i)}">Copy</button>
-        </div>
-      </div>
-    `).join('');
-  }
+	if(matches.length === 0){
+		grid.innerHTML = '<div class="empty-state"><div class="big">🦍</div>no cosmetic named "' + esc(query) + '" found</div>';
+		return;
+	}
 
-  grid.addEventListener('click', e => {
-    const btn = e.target.closest('.copy-btn');
-    if(!btn) return;
-    const id = btn.getAttribute('data-id');
-    navigator.clipboard?.writeText(id).then(() => {
-      btn.textContent = 'Copied';
-      btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1100);
-    }).catch(() => {});
-  });
+	var html = '';
+	for(var j=0;j<matches.length;j++){
+		var d = matches[j];
+		html += '<div class="card">';
+		html += '<div class="eyebrow">' + esc(d.c) + '</div>';
+		html += '<div class="name">' + hl(d.n, q) + '</div>';
+		html += '<div class="tag-row">';
+		html += '<span class="id-tag">' + esc(d.i) + '</span>';
+		html += '<button class="copy-btn" data-id="' + esc(d.i) + '">copy</button>';
+		html += '</div></div>';
+	}
+	grid.innerHTML = html;
+}
 
-  input.addEventListener('input', () => render(input.value));
+grid.addEventListener('click', function(e){
+	var btn = e.target.closest('.copy-btn');
+	if(!btn) return;
+	var id = btn.getAttribute('data-id');
+	if(navigator.clipboard){
+		navigator.clipboard.writeText(id).then(function(){
+			btn.textContent = 'copied!';
+			btn.classList.add('copied');
+			setTimeout(function(){
+				btn.textContent = 'copy';
+				btn.classList.remove('copied');
+			}, 1100);
+		});
+	}
+});
 
-  render('');
+searchBox.addEventListener('input', function(){
+	draw(searchBox.value);
+});
+
+draw('');
 </script>
 </body>
 </html>
