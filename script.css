@@ -1,0 +1,166 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f6f6f6;
+  color: #111;
+  min-height: 100vh;
+}
+
+nav {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  padding: 0 7%;
+  background: white;
+  border-bottom: 1px solid #eee;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.logo span {
+  color: #ff2d55;
+}
+
+main {
+  min-height: calc(100vh - 130px);
+  display: flex;
+  justify-content: center;
+}
+
+.hero {
+  width: 100%;
+  max-width: 850px;
+  text-align: center;
+  padding: 110px 20px;
+}
+
+.hero h1 {
+  font-size: 52px;
+  font-weight: 800;
+  margin-bottom: 15px;
+}
+
+.hero > p {
+  color: #666;
+  font-size: 18px;
+  margin-bottom: 35px;
+}
+
+.search-box {
+  display: flex;
+  width: 100%;
+  max-width: 750px;
+  margin: auto;
+  background: white;
+  padding: 7px;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 17px;
+  font-size: 16px;
+  min-width: 0;
+}
+
+.search-box button {
+  border: none;
+  background: #111;
+  color: white;
+  padding: 0 28px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.search-box button:hover {
+  background: #333;
+}
+
+.search-box button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+#error {
+  color: #e00000;
+  margin-top: 18px;
+  font-size: 15px;
+}
+
+.result {
+  background: white;
+  max-width: 600px;
+  margin: 35px auto 0;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.result img {
+  width: 100%;
+  max-height: 350px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.result h2 {
+  margin: 18px 0;
+}
+
+.download-button {
+  display: inline-block;
+  padding: 14px 25px;
+  background: #111;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.hidden {
+  display: none;
+}
+
+footer {
+  height: 60px;
+  background: white;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #777;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+
+  .hero {
+    padding-top: 70px;
+  }
+
+  .hero h1 {
+    font-size: 38px;
+  }
+
+  .search-box {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .search-box button {
+    height: 50px;
+  }
+}
