@@ -1,480 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#1a1a1a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Android Dev Tool</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-            background: #1a1a1a;
-            color: white;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, #00a8e8 0%, #0080aa 100%);
-            padding: 15px 20px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .header h1 {
-            font-size: clamp(20px, 5vw, 28px);
-            margin-bottom: 5px;
-        }
-
-        .header p {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-
-        /* Main Container */
-        .container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            background: #2b2b2b;
-            margin: 10px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-        }
-
-        /* Toolbar */
-        .toolbar {
-            background: #1e1e1e;
-            padding: 10px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-            gap: 6px;
-            border-bottom: 1px solid #404040;
-            overflow-y: auto;
-            max-height: 110px;
-        }
-
-        .toolbar button {
-            background: #00a8e8;
-            color: white;
-            border: none;
-            padding: 10px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 600;
-            transition: 0.2s;
-            white-space: nowrap;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .toolbar button:active {
-            background: #00d4ff;
-            transform: scale(0.98);
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            background: #1e1e1e;
-            border-bottom: 1px solid #404040;
-            flex-shrink: 0;
-            gap: 0;
-        }
-
-        .tab-button {
-            flex: 1;
-            padding: 12px 10px;
-            background: #2b2b2b;
-            color: #888;
-            border: none;
-            border-bottom: 3px solid transparent;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: 0.2s;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .tab-button:active {
-            background: #333;
-        }
-
-        .tab-button.active {
-            color: white;
-            border-bottom-color: #00a8e8;
-            background: #2b2b2b;
-        }
-
-        /* Content Area */
-        .content-wrapper {
-            flex: 1;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .content {
-            display: none;
-            flex: 1;
-            padding: 15px;
-            background: #1e1e1e;
-            color: #00ff00;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            line-height: 1.6;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .content.active {
-            display: block;
-        }
-
-        .content.files {
-            color: #4ec9b0;
-        }
-
-        .content.info {
-            color: #ffffff;
-            white-space: pre-line;
-        }
-
-        .timestamp {
-            color: #666;
-        }
-
-        .success {
-            color: #00d97e;
-            font-weight: bold;
-        }
-
-        /* Instruction Banner */
-        .instruction {
-            background: #0d4d2e;
-            color: #4ec9b0;
-            padding: 8px 15px;
-            text-align: center;
-            font-size: 12px;
-            border-bottom: 1px solid #404040;
-            flex-shrink: 0;
-        }
-
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #1e1e1e;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #404040;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #505050;
-        }
-
-        /* Mobile Optimizations */
-        @media (max-width: 600px) {
-            .header {
-                padding: 12px 15px;
-            }
-
-            .header h1 {
-                font-size: 20px;
-                margin-bottom: 3px;
-            }
-
-            .header p {
-                font-size: 11px;
-            }
-
-            .container {
-                margin: 5px;
-                border-radius: 4px;
-            }
-
-            .toolbar {
-                grid-template-columns: repeat(2, 1fr);
-                max-height: 150px;
-            }
-
-            .toolbar button {
-                font-size: 10px;
-                padding: 8px 6px;
-            }
-
-            .tab-button {
-                font-size: 12px;
-                padding: 10px 8px;
-            }
-
-            .content {
-                font-size: 11px;
-                padding: 12px;
-            }
-
-            .instruction {
-                font-size: 11px;
-                padding: 6px 12px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            body {
-                padding: 5px;
-            }
-
-            .header {
-                padding: 10px 12px;
-            }
-
-            .header h1 {
-                font-size: 18px;
-            }
-
-            .header p {
-                display: none;
-            }
-
-            .container {
-                margin: 3px;
-            }
-
-            .toolbar {
-                gap: 4px;
-                padding: 6px;
-            }
-
-            .toolbar button {
-                font-size: 9px;
-                padding: 6px 4px;
-                min-height: 40px;
-            }
-
-            .tab-button {
-                font-size: 11px;
-                padding: 8px 6px;
-            }
-
-            .content {
-                font-size: 10px;
-                padding: 10px;
-                line-height: 1.5;
-            }
-        }
-
-        /* Landscape mode */
-        @media (max-height: 500px) {
-            .header {
-                padding: 8px 15px;
-            }
-
-            .header h1 {
-                font-size: 18px;
-                margin-bottom: 2px;
-            }
-
-            .header p {
-                font-size: 10px;
-            }
-
-            .toolbar {
-                max-height: 80px;
-            }
-
-            .content {
-                font-size: 11px;
-                padding: 10px;
-            }
-        }
-
-        /* Status bar spacing for notch devices */
-        @supports (padding: max(0px)) {
-            body {
-                padding-top: env(safe-area-inset-top);
-                padding-left: env(safe-area-inset-left);
-                padding-right: env(safe-area-inset-right);
-                padding-bottom: env(safe-area-inset-bottom);
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Downloader</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="header">
-        <h1>⚙️ Android Dev Tool</h1>
-        <p>Lightweight IDE for Low-Spec PCs</p>
-    </div>
 
-    <div class="container">
-        <div class="instruction">
-            👉 Click tabs to switch views
-        </div>
+  <nav>
+    <div class="logo">Video<span>Save</span></div>
+  </nav>
 
-        <div class="toolbar">
-            <button onclick="showNotification()">📂 Open</button>
-            <button onclick="showNotification()">✨ New</button>
-            <button onclick="showNotification()">🔨 Build</button>
-            <button onclick="showNotification()">🧹 Clean</button>
-            <button onclick="showNotification()">▶️ Run</button>
-            <button onclick="showNotification()">📱 Devices</button>
-        </div>
+  <main>
+    <section class="hero">
 
-        <div class="tabs">
-            <button class="tab-button active" onclick="showTab(event, 'output')">📊 Build</button>
-            <button class="tab-button" onclick="showTab(event, 'files')">📁 Files</button>
-            <button class="tab-button" onclick="showTab(event, 'info')">ℹ️ Info</button>
-        </div>
+      <h1>Download Videos</h1>
 
-        <div class="content-wrapper">
-            <div id="output" class="content active"><span class="timestamp">[14:32:25]</span> Starting build...
-<span class="timestamp">[14:32:25]</span> Project: MyAndroidApp
-<span class="timestamp">[14:32:26]</span>
-<span class="timestamp">[14:32:26]</span> > Task :app:compileDebugJava
-<span class="timestamp">[14:32:28]</span> > Task :app:dexDebug
-<span class="timestamp">[14:32:30]</span> > Task :app:processDebugResources
-<span class="timestamp">[14:32:32]</span> > Task :app:assembleDebug
-<span class="timestamp">[14:32:33]</span>
-<span class="success">✓ Build successful!</span>
-<span class="timestamp">[14:32:33]</span> APK: app/build/outputs/apk/
-<span class="timestamp">[14:32:33]</span>   app-debug.apk
-<span class="timestamp">[14:32:33]</span> Build took 8.2 seconds</div>
+      <p>
+        Paste a supported video link below to get started.
+      </p>
 
-            <div id="files" class="content files">📁 MyApp/
-  📁 app/
-    📁 src/
-      📁 main/
-        📁 java/
-          📁 com/example/myapp/
-            📄 MainActivity.java
-            📄 utils.java
-        📁 res/
-          📁 layout/
-            📄 activity_main.xml
-          📁 values/
-            📄 strings.xml
-            📄 colors.xml
-            📄 styles.xml
-        📄 AndroidManifest.xml
-    📄 build.gradle
-  📄 settings.gradle
-  📄 gradle.properties</div>
+      <div class="search-box">
+        <input
+          id="url"
+          type="text"
+          placeholder="Paste video URL here..."
+        >
 
-            <div id="info" class="content info">ANDROID DEV TOOL v1.0
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        <button id="downloadBtn">
+          Download
+        </button>
+      </div>
 
-✨ LIGHTWEIGHT IDE
-• 50MB vs 5GB (Android Studio)
-• 200MB RAM vs 2-4GB
-• Fast startup & responsive
+      <p id="error"></p>
 
-🔨 BUILD TOOLS
-✓ Debug APK builds
-✓ Release APK builds  
-✓ Gradle integration
-✓ Real-time output logs
+      <div id="result" class="result hidden">
 
-📱 DEVICE SUPPORT
-✓ List connected devices
-✓ Install APK to device
-✓ Run app instantly
-✓ USB & wireless ADB
+        <img id="thumbnail" src="" alt="Video thumbnail">
 
-📂 PROJECT MANAGEMENT
-✓ Create new projects
-✓ Open existing projects
-✓ File explorer
-✓ Project templates
+        <h2 id="title">Video Ready</h2>
 
-💻 SYSTEM REQUIREMENTS
-• Python 3.8+
-• Java JDK 11+
-• Android SDK
+        <a
+          id="downloadLink"
+          href="#"
+          target="_blank"
+          class="download-button"
+        >
+          Download Video
+        </a>
 
-🚀 QUICK START
-1. Extract ZIP file
-2. Run setup.bat or pip install
-3. Launch the tool
-4. Click "New Project"
-5. Click "Build APK"
+      </div>
 
-📥 DOWNLOAD
-github.com/your-repo/android-dev-tool
-or extract android-dev-tool.zip
+    </section>
+  </main>
 
-Happy coding! 🎉</div>
-        </div>
-    </div>
+  <footer>
+    VideoSave • Simple video downloader
+  </footer>
 
-    <script>
-        function showTab(event, tabName) {
-            // Hide all contents
-            var contents = document.querySelectorAll('.content');
-            contents.forEach(function(content) {
-                content.classList.remove('active');
-            });
+  <script src="script.js"></script>
 
-            // Remove active from all buttons
-            var buttons = document.querySelectorAll('.tab-button');
-            buttons.forEach(function(button) {
-                button.classList.remove('active');
-            });
-
-            // Show selected content
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
-        }
-
-        function showNotification() {
-            alert('In the real app, this button would open the corresponding feature!');
-        }
-
-        // Prevent pinch zoom on mobile
-        document.addEventListener('touchmove', function(event) {
-            if (event.touches.length > 1) {
-                event.preventDefault();
-            }
-        }, false);
-
-        // Full screen hint
-        window.addEventListener('load', function() {
-            console.log('Android Dev Tool Preview Loaded');
-        });
-    </script>
 </body>
 </html>
